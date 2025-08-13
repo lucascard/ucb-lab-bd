@@ -1,0 +1,68 @@
+site_name: UBC Lab BD - Documentação
+site_description: Documentação do software desenvolvido pelo UBC Lab BD
+site_author: UBC Lab BD Team
+site_url: https://lucascard.github.io/ubc-lab-bd/
+
+# Repository
+repo_name: lucascard/ubc-lab-bd
+repo_url: https://github.com/lucascard/ubc-lab-bd
+
+# Copyright
+copyright: Copyright &copy; 2024 UBC Lab BD
+
+# Configuration
+theme:
+  name: material
+  language: pt
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+
+# Extensions
+markdown_extensions:
+  - admonition
+  - codehilite
+  - footnotes
+  - meta
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+# Page tree
+nav:
+  - Home: index.md
+  - Sobre o Projeto:
+    - Visão Geral: sobre/visao-geral.md
+    - Objetivos: sobre/objetivos.md
+    - Arquitetura: sobre/arquitetura.md
+  - Desenvolvimento:
+    - Configuração do Ambiente: desenvolvimento/configuracao-ambiente.md
+    - Guia de Contribuição: desenvolvimento/guia-contribuicao.md
+    - Padrões de Código: desenvolvimento/padroes-codigo.md
+  - API:
+    - Documentação da API: api/documentacao.md
+    - Exemplos: api/exemplos.md
+  - Deploy:
+    - Configuração: deploy/configuracao.md
+    - Guia de Deploy: deploy/guia-deploy.md
