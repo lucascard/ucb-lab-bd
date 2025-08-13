@@ -1,0 +1,2152 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentação do software desenvolvido pelo UBC Lab BD">
+      
+      
+        <meta name="author" content="UBC Lab BD Team">
+      
+      
+        <link rel="canonical" href="https://lucascard.github.io/ubc-lab-bd/api/documentacao/">
+      
+      
+        <link rel="prev" href="../../desenvolvimento/padroes-codigo/">
+      
+      
+        <link rel="next" href="../exemplos/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.16">
+    
+    
+      
+        <title>Documentação da API - UBC Lab BD - Documentação</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.7e37652d.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#documentacao-da-api" class="md-skip">
+          Ir para o conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="../.." title="UBC Lab BD - Documentação" class="md-header__button md-logo" aria-label="UBC Lab BD - Documentação" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            UBC Lab BD - Documentação
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Documentação da API
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando a pesquisa
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/lucascard/ubc-lab-bd" title="Ir ao repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    lucascard/ubc-lab-bd
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Abas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../sobre/visao-geral/" class="md-tabs__link">
+          
+  
+  
+  Sobre o Projeto
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../desenvolvimento/configuracao-ambiente/" class="md-tabs__link">
+          
+  
+  
+  Desenvolvimento
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  
+  API
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../deploy/configuracao/" class="md-tabs__link">
+          
+  
+  
+  Deploy
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="UBC Lab BD - Documentação" class="md-nav__button md-logo" aria-label="UBC Lab BD - Documentação" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    UBC Lab BD - Documentação
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/lucascard/ubc-lab-bd" title="Ir ao repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    lucascard/ubc-lab-bd
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Sobre o Projeto
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Sobre o Projeto
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sobre/visao-geral/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Visão Geral
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sobre/objetivos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Objetivos
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sobre/arquitetura/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Arquitetura
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Desenvolvimento
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Desenvolvimento
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../desenvolvimento/configuracao-ambiente/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Configuração do Ambiente
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../desenvolvimento/guia-contribuicao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Guia de Contribuição
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../desenvolvimento/padroes-codigo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Padrões de Código
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    API
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            API
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Documentação da API
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Documentação da API
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#visao-geral" class="md-nav__link">
+    <span class="md-ellipsis">
+      🚀 Visão Geral
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#base-url" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔗 Base URL
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#autenticacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔐 Autenticação
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔐 Autenticação">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#jwt-bearer-token" class="md-nav__link">
+    <span class="md-ellipsis">
+      JWT Bearer Token
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#obter-token" class="md-nav__link">
+    <span class="md-ellipsis">
+      Obter Token
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usuarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      👤 Usuários
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="👤 Usuários">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#criar-usuario" class="md-nav__link">
+    <span class="md-ellipsis">
+      Criar Usuário
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#listar-usuarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      Listar Usuários
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#obter-usuario-por-id" class="md-nav__link">
+    <span class="md-ellipsis">
+      Obter Usuário por ID
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#atualizar-usuario" class="md-nav__link">
+    <span class="md-ellipsis">
+      Atualizar Usuário
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deletar-usuario" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deletar Usuário
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#datasets" class="md-nav__link">
+    <span class="md-ellipsis">
+      📊 Datasets
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 Datasets">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#criar-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      Criar Dataset
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#upload-de-dados" class="md-nav__link">
+    <span class="md-ellipsis">
+      Upload de Dados
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consultar-dados" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consultar Dados
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#analytics" class="md-nav__link">
+    <span class="md-ellipsis">
+      📈 Analytics
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📈 Analytics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#executar-analise" class="md-nav__link">
+    <span class="md-ellipsis">
+      Executar Análise
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analises-disponiveis" class="md-nav__link">
+    <span class="md-ellipsis">
+      Análises Disponíveis
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#relatorios" class="md-nav__link">
+    <span class="md-ellipsis">
+      📋 Relatórios
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📋 Relatórios">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gerar-relatorio" class="md-nav__link">
+    <span class="md-ellipsis">
+      Gerar Relatório
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#download-de-relatorio" class="md-nav__link">
+    <span class="md-ellipsis">
+      Download de Relatório
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#busca-global" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔍 Busca Global
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔍 Busca Global">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#buscar-em-todo-o-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      Buscar em Todo o Sistema
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metricas-e-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      📊 Métricas e Status
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 Métricas e Status">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#status-da-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      Status da API
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#metricas-do-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      Métricas do Sistema
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#codigos-de-erro" class="md-nav__link">
+    <span class="md-ellipsis">
+      ❌ Códigos de Erro
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="❌ Códigos de Erro">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#estrutura-de-erro" class="md-nav__link">
+    <span class="md-ellipsis">
+      Estrutura de Erro
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#codigos-http-comuns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Códigos HTTP Comuns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rate-limiting" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔄 Rate Limiting
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔄 Rate Limiting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#limites-por-usuario" class="md-nav__link">
+    <span class="md-ellipsis">
+      Limites por Usuário
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#headers-de-rate-limit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Headers de Rate Limit
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#versionamento" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔄 Versionamento
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔄 Versionamento">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#estrategia" class="md-nav__link">
+    <span class="md-ellipsis">
+      Estratégia
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#headers-de-versao" class="md-nav__link">
+    <span class="md-ellipsis">
+      Headers de Versão
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sdks-e-bibliotecas" class="md-nav__link">
+    <span class="md-ellipsis">
+      📚 SDKs e Bibliotecas
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📚 SDKs e Bibliotecas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#python" class="md-nav__link">
+    <span class="md-ellipsis">
+      Python
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#javascriptnodejs" class="md-nav__link">
+    <span class="md-ellipsis">
+      JavaScript/Node.js
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ambiente-de-testes" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧪 Ambiente de Testes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧪 Ambiente de Testes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sandbox" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sandbox
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exemplos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Exemplos
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Deploy
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Deploy
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deploy/configuracao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Configuração
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deploy/guia-deploy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Guia de Deploy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#visao-geral" class="md-nav__link">
+    <span class="md-ellipsis">
+      🚀 Visão Geral
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#base-url" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔗 Base URL
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#autenticacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔐 Autenticação
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔐 Autenticação">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#jwt-bearer-token" class="md-nav__link">
+    <span class="md-ellipsis">
+      JWT Bearer Token
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#obter-token" class="md-nav__link">
+    <span class="md-ellipsis">
+      Obter Token
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usuarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      👤 Usuários
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="👤 Usuários">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#criar-usuario" class="md-nav__link">
+    <span class="md-ellipsis">
+      Criar Usuário
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#listar-usuarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      Listar Usuários
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#obter-usuario-por-id" class="md-nav__link">
+    <span class="md-ellipsis">
+      Obter Usuário por ID
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#atualizar-usuario" class="md-nav__link">
+    <span class="md-ellipsis">
+      Atualizar Usuário
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deletar-usuario" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deletar Usuário
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#datasets" class="md-nav__link">
+    <span class="md-ellipsis">
+      📊 Datasets
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 Datasets">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#criar-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      Criar Dataset
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#upload-de-dados" class="md-nav__link">
+    <span class="md-ellipsis">
+      Upload de Dados
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consultar-dados" class="md-nav__link">
+    <span class="md-ellipsis">
+      Consultar Dados
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#analytics" class="md-nav__link">
+    <span class="md-ellipsis">
+      📈 Analytics
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📈 Analytics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#executar-analise" class="md-nav__link">
+    <span class="md-ellipsis">
+      Executar Análise
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analises-disponiveis" class="md-nav__link">
+    <span class="md-ellipsis">
+      Análises Disponíveis
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#relatorios" class="md-nav__link">
+    <span class="md-ellipsis">
+      📋 Relatórios
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📋 Relatórios">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gerar-relatorio" class="md-nav__link">
+    <span class="md-ellipsis">
+      Gerar Relatório
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#download-de-relatorio" class="md-nav__link">
+    <span class="md-ellipsis">
+      Download de Relatório
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#busca-global" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔍 Busca Global
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔍 Busca Global">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#buscar-em-todo-o-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      Buscar em Todo o Sistema
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metricas-e-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      📊 Métricas e Status
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 Métricas e Status">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#status-da-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      Status da API
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#metricas-do-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      Métricas do Sistema
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#codigos-de-erro" class="md-nav__link">
+    <span class="md-ellipsis">
+      ❌ Códigos de Erro
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="❌ Códigos de Erro">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#estrutura-de-erro" class="md-nav__link">
+    <span class="md-ellipsis">
+      Estrutura de Erro
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#codigos-http-comuns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Códigos HTTP Comuns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rate-limiting" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔄 Rate Limiting
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔄 Rate Limiting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#limites-por-usuario" class="md-nav__link">
+    <span class="md-ellipsis">
+      Limites por Usuário
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#headers-de-rate-limit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Headers de Rate Limit
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#versionamento" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔄 Versionamento
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔄 Versionamento">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#estrategia" class="md-nav__link">
+    <span class="md-ellipsis">
+      Estratégia
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#headers-de-versao" class="md-nav__link">
+    <span class="md-ellipsis">
+      Headers de Versão
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sdks-e-bibliotecas" class="md-nav__link">
+    <span class="md-ellipsis">
+      📚 SDKs e Bibliotecas
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📚 SDKs e Bibliotecas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#python" class="md-nav__link">
+    <span class="md-ellipsis">
+      Python
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#javascriptnodejs" class="md-nav__link">
+    <span class="md-ellipsis">
+      JavaScript/Node.js
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ambiente-de-testes" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧪 Ambiente de Testes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧪 Ambiente de Testes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sandbox" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sandbox
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="documentacao-da-api">Documentação da API<a class="headerlink" href="#documentacao-da-api" title="Permanent link">&para;</a></h1>
+<h2 id="visao-geral">🚀 Visão Geral<a class="headerlink" href="#visao-geral" title="Permanent link">&para;</a></h2>
+<p>A API do UBC Lab BD fornece acesso programático a todas as funcionalidades do sistema, permitindo integração com outros sistemas e desenvolvimento de aplicações customizadas.</p>
+<h2 id="base-url">🔗 Base URL<a class="headerlink" href="#base-url" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code># Desenvolvimento
+https://api-dev.ubclab.example.com/v1
+
+# Produção
+https://api.ubclab.example.com/v1
+</code></pre></div>
+<h2 id="autenticacao">🔐 Autenticação<a class="headerlink" href="#autenticacao" title="Permanent link">&para;</a></h2>
+<h3 id="jwt-bearer-token">JWT Bearer Token<a class="headerlink" href="#jwt-bearer-token" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</span>
+</code></pre></div>
+<h3 id="obter-token">Obter Token<a class="headerlink" href="#obter-token" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">POST /auth/login</span>
+<span class="err">Content-Type: application/json</span>
+
+<span class="err">{</span>
+<span class="err">    &quot;username&quot;: &quot;seu_usuario&quot;,</span>
+<span class="err">    &quot;password&quot;: &quot;sua_senha&quot;</span>
+<span class="err">}</span>
+</code></pre></div>
+<p><strong>Resposta:</strong>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;access_token&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;refresh_token&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;token_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bearer&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;expires_in&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3600</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<h2 id="usuarios">👤 Usuários<a class="headerlink" href="#usuarios" title="Permanent link">&para;</a></h2>
+<h3 id="criar-usuario">Criar Usuário<a class="headerlink" href="#criar-usuario" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">POST /users</span>
+<span class="err">Content-Type: application/json</span>
+<span class="err">Authorization: Bearer {token}</span>
+
+<span class="err">{</span>
+<span class="err">    &quot;username&quot;: &quot;novousuario&quot;,</span>
+<span class="err">    &quot;email&quot;: &quot;usuario@example.com&quot;,</span>
+<span class="err">    &quot;password&quot;: &quot;senha_segura_123&quot;,</span>
+<span class="err">    &quot;full_name&quot;: &quot;Nome Completo&quot;</span>
+<span class="err">}</span>
+</code></pre></div>
+<p><strong>Resposta (201 Created):</strong>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">123</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;novousuario&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;usuario@example.com&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;full_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Nome Completo&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;is_active&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;created_at&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2024-12-08T22:53:00Z&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;last_login&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<h3 id="listar-usuarios">Listar Usuários<a class="headerlink" href="#listar-usuarios" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">GET /users?page=1&amp;size=20&amp;search=termo</span>
+<span class="err">Authorization: Bearer {token}</span>
+</code></pre></div>
+<p><strong>Parâmetros de Query:</strong>
+- <code>page</code> (int, opcional): Página (padrão: 1)
+- <code>size</code> (int, opcional): Itens por página (padrão: 20, máx: 100)
+- <code>search</code> (string, opcional): Busca por username ou email</p>
+<p><strong>Resposta (200 OK):</strong>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;items&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">123</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;usuario1&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;usuario1@example.com&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;full_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Usuário Um&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;is_active&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;created_at&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2024-12-08T22:53:00Z&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;total&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;page&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;size&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;pages&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<h3 id="obter-usuario-por-id">Obter Usuário por ID<a class="headerlink" href="#obter-usuario-por-id" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">GET /users/{user_id}</span>
+<span class="err">Authorization: Bearer {token}</span>
+</code></pre></div>
+<h3 id="atualizar-usuario">Atualizar Usuário<a class="headerlink" href="#atualizar-usuario" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">PUT /users/{user_id}</span>
+<span class="err">Content-Type: application/json</span>
+<span class="err">Authorization: Bearer {token}</span>
+
+<span class="err">{</span>
+<span class="err">    &quot;full_name&quot;: &quot;Nome Atualizado&quot;,</span>
+<span class="err">    &quot;email&quot;: &quot;novo_email@example.com&quot;</span>
+<span class="err">}</span>
+</code></pre></div>
+<h3 id="deletar-usuario">Deletar Usuário<a class="headerlink" href="#deletar-usuario" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">DELETE /users/{user_id}</span>
+<span class="err">Authorization: Bearer {token}</span>
+</code></pre></div>
+<h2 id="datasets">📊 Datasets<a class="headerlink" href="#datasets" title="Permanent link">&para;</a></h2>
+<h3 id="criar-dataset">Criar Dataset<a class="headerlink" href="#criar-dataset" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">POST /datasets</span>
+<span class="err">Content-Type: application/json</span>
+<span class="err">Authorization: Bearer {token}</span>
+
+<span class="err">{</span>
+<span class="err">    &quot;name&quot;: &quot;Vendas Q4 2024&quot;,</span>
+<span class="err">    &quot;description&quot;: &quot;Dados de vendas do quarto trimestre&quot;,</span>
+<span class="err">    &quot;schema&quot;: {</span>
+<span class="err">        &quot;columns&quot;: [</span>
+<span class="err">            {</span>
+<span class="err">                &quot;name&quot;: &quot;data_venda&quot;,</span>
+<span class="err">                &quot;type&quot;: &quot;datetime&quot;,</span>
+<span class="err">                &quot;required&quot;: true</span>
+<span class="err">            },</span>
+<span class="err">            {</span>
+<span class="err">                &quot;name&quot;: &quot;produto&quot;,</span>
+<span class="err">                &quot;type&quot;: &quot;string&quot;,</span>
+<span class="err">                &quot;required&quot;: true</span>
+<span class="err">            },</span>
+<span class="err">            {</span>
+<span class="err">                &quot;name&quot;: &quot;valor&quot;,</span>
+<span class="err">                &quot;type&quot;: &quot;decimal&quot;,</span>
+<span class="err">                &quot;required&quot;: true</span>
+<span class="err">            }</span>
+<span class="err">        ]</span>
+<span class="err">    },</span>
+<span class="err">    &quot;tags&quot;: [&quot;vendas&quot;, &quot;q4&quot;, &quot;2024&quot;]</span>
+<span class="err">}</span>
+</code></pre></div>
+<h3 id="upload-de-dados">Upload de Dados<a class="headerlink" href="#upload-de-dados" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">POST /datasets/{dataset_id}/data</span>
+<span class="err">Content-Type: multipart/form-data</span>
+<span class="err">Authorization: Bearer {token}</span>
+
+<span class="err">file: (binary data)</span>
+<span class="err">format: csv</span>
+<span class="err">delimiter: ,</span>
+<span class="err">has_header: true</span>
+</code></pre></div>
+<h3 id="consultar-dados">Consultar Dados<a class="headerlink" href="#consultar-dados" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">GET /datasets/{dataset_id}/data?limit=100&amp;offset=0&amp;filter=valor&gt;1000</span>
+<span class="err">Authorization: Bearer {token}</span>
+</code></pre></div>
+<p><strong>Parâmetros de Query:</strong>
+- <code>limit</code> (int): Número máximo de registros
+- <code>offset</code> (int): Número de registros para pular
+- <code>filter</code> (string): Filtro SQL-like (ex: "coluna&gt;valor", "nome='João'")
+- <code>sort</code> (string): Ordenação (ex: "data_venda desc")</p>
+<h2 id="analytics">📈 Analytics<a class="headerlink" href="#analytics" title="Permanent link">&para;</a></h2>
+<h3 id="executar-analise">Executar Análise<a class="headerlink" href="#executar-analise" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">POST /analytics/execute</span>
+<span class="err">Content-Type: application/json</span>
+<span class="err">Authorization: Bearer {token}</span>
+
+<span class="err">{</span>
+<span class="err">    &quot;dataset_id&quot;: 123,</span>
+<span class="err">    &quot;analysis_type&quot;: &quot;statistics&quot;,</span>
+<span class="err">    &quot;parameters&quot;: {</span>
+<span class="err">        &quot;columns&quot;: [&quot;valor&quot;, &quot;quantidade&quot;],</span>
+<span class="err">        &quot;group_by&quot;: [&quot;produto&quot;],</span>
+<span class="err">        &quot;functions&quot;: [&quot;mean&quot;, &quot;sum&quot;, &quot;count&quot;]</span>
+<span class="err">    }</span>
+<span class="err">}</span>
+</code></pre></div>
+<p><strong>Resposta (200 OK):</strong>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;analysis_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;abc123&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;completed&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;results&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;produto_a&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;valor_mean&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">150.75</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;valor_sum&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">15075.00</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;quantidade_sum&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">120</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;count&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="nt">&quot;produto_b&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;valor_mean&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">230.50</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;valor_sum&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">23050.00</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;quantidade_sum&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">80</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;count&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;metadata&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;execution_time_ms&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">245</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;rows_processed&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<h3 id="analises-disponiveis">Análises Disponíveis<a class="headerlink" href="#analises-disponiveis" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">GET /analytics/types</span>
+<span class="err">Authorization: Bearer {token}</span>
+</code></pre></div>
+<h2 id="relatorios">📋 Relatórios<a class="headerlink" href="#relatorios" title="Permanent link">&para;</a></h2>
+<h3 id="gerar-relatorio">Gerar Relatório<a class="headerlink" href="#gerar-relatorio" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">POST /reports</span>
+<span class="err">Content-Type: application/json</span>
+<span class="err">Authorization: Bearer {token}</span>
+
+<span class="err">{</span>
+<span class="err">    &quot;name&quot;: &quot;Relatório de Vendas&quot;,</span>
+<span class="err">    &quot;dataset_id&quot;: 123,</span>
+<span class="err">    &quot;template&quot;: &quot;sales_summary&quot;,</span>
+<span class="err">    &quot;parameters&quot;: {</span>
+<span class="err">        &quot;date_range&quot;: {</span>
+<span class="err">            &quot;start&quot;: &quot;2024-10-01&quot;,</span>
+<span class="err">            &quot;end&quot;: &quot;2024-12-31&quot;</span>
+<span class="err">        },</span>
+<span class="err">        &quot;group_by&quot;: &quot;produto&quot;,</span>
+<span class="err">        &quot;format&quot;: &quot;pdf&quot;</span>
+<span class="err">    }</span>
+<span class="err">}</span>
+</code></pre></div>
+<h3 id="download-de-relatorio">Download de Relatório<a class="headerlink" href="#download-de-relatorio" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">GET /reports/{report_id}/download</span>
+<span class="err">Authorization: Bearer {token}</span>
+</code></pre></div>
+<h2 id="busca-global">🔍 Busca Global<a class="headerlink" href="#busca-global" title="Permanent link">&para;</a></h2>
+<h3 id="buscar-em-todo-o-sistema">Buscar em Todo o Sistema<a class="headerlink" href="#buscar-em-todo-o-sistema" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">GET /search?q=vendas&amp;type=datasets&amp;limit=10</span>
+<span class="err">Authorization: Bearer {token}</span>
+</code></pre></div>
+<p><strong>Parâmetros:</strong>
+- <code>q</code> (string): Termo de busca
+- <code>type</code> (string, opcional): Tipo de recurso (datasets, users, reports)
+- <code>limit</code> (int, opcional): Limite de resultados</p>
+<h2 id="metricas-e-status">📊 Métricas e Status<a class="headerlink" href="#metricas-e-status" title="Permanent link">&para;</a></h2>
+<h3 id="status-da-api">Status da API<a class="headerlink" href="#status-da-api" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">GET /health</span>
+</code></pre></div>
+<p><strong>Resposta:</strong>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;healthy&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2024-12-08T22:53:00Z&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1.2.3&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;services&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;database&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;healthy&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;cache&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;healthy&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;storage&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;healthy&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<h3 id="metricas-do-sistema">Métricas do Sistema<a class="headerlink" href="#metricas-do-sistema" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">GET /metrics</span>
+<span class="err">Authorization: Bearer {token}</span>
+</code></pre></div>
+<h2 id="codigos-de-erro">❌ Códigos de Erro<a class="headerlink" href="#codigos-de-erro" title="Permanent link">&para;</a></h2>
+<h3 id="estrutura-de-erro">Estrutura de Erro<a class="headerlink" href="#estrutura-de-erro" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;error&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;VALIDATION_ERROR&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Dados de entrada inválidos&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;details&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;field&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;email&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;reason&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;formato inválido&quot;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2024-12-08T22:53:00Z&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;request_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;req_abc123&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="codigos-http-comuns">Códigos HTTP Comuns<a class="headerlink" href="#codigos-http-comuns" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>200 OK</strong>: Sucesso</li>
+<li><strong>201 Created</strong>: Recurso criado</li>
+<li><strong>400 Bad Request</strong>: Dados inválidos</li>
+<li><strong>401 Unauthorized</strong>: Não autenticado</li>
+<li><strong>403 Forbidden</strong>: Sem permissão</li>
+<li><strong>404 Not Found</strong>: Recurso não encontrado</li>
+<li><strong>422 Unprocessable Entity</strong>: Erro de validação</li>
+<li><strong>429 Too Many Requests</strong>: Rate limit excedido</li>
+<li><strong>500 Internal Server Error</strong>: Erro interno</li>
+</ul>
+<h2 id="rate-limiting">🔄 Rate Limiting<a class="headerlink" href="#rate-limiting" title="Permanent link">&para;</a></h2>
+<h3 id="limites-por-usuario">Limites por Usuário<a class="headerlink" href="#limites-por-usuario" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Requests por minuto</strong>: 1000</li>
+<li><strong>Requests por hora</strong>: 10000</li>
+<li><strong>Upload de dados</strong>: 10 arquivos/hora</li>
+</ul>
+<h3 id="headers-de-rate-limit">Headers de Rate Limit<a class="headerlink" href="#headers-de-rate-limit" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">X-RateLimit-Limit: 1000</span>
+<span class="err">X-RateLimit-Remaining: 999</span>
+<span class="err">X-RateLimit-Reset: 1640995200</span>
+</code></pre></div>
+<h2 id="versionamento">🔄 Versionamento<a class="headerlink" href="#versionamento" title="Permanent link">&para;</a></h2>
+<h3 id="estrategia">Estratégia<a class="headerlink" href="#estrategia" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Versionamento na URL: <code>/v1/</code>, <code>/v2/</code></li>
+<li>Backward compatibility mantida por 12 meses</li>
+<li>Deprecation notices com 6 meses de antecedência</li>
+</ul>
+<h3 id="headers-de-versao">Headers de Versão<a class="headerlink" href="#headers-de-versao" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="err">API-Version: 1.0</span>
+<span class="err">Deprecated-Version: false</span>
+<span class="err">Sunset-Date: 2025-12-01</span>
+</code></pre></div>
+<h2 id="sdks-e-bibliotecas">📚 SDKs e Bibliotecas<a class="headerlink" href="#sdks-e-bibliotecas" title="Permanent link">&para;</a></h2>
+<h3 id="python">Python<a class="headerlink" href="#python" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>ubclab-client
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ubclab</span><span class="w"> </span><span class="kn">import</span> <span class="n">UBCLabClient</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">UBCLabClient</span><span class="p">(</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://api.ubclab.example.com/v1&quot;</span><span class="p">,</span>
+    <span class="n">token</span><span class="o">=</span><span class="s2">&quot;seu_token_aqui&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Criar dataset</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">create</span><span class="p">({</span>
+    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Meu Dataset&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Descrição do dataset&quot;</span>
+<span class="p">})</span>
+
+<span class="c1"># Upload de dados</span>
+<span class="n">client</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">upload_data</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s2">&quot;dados.csv&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="javascriptnodejs">JavaScript/Node.js<a class="headerlink" href="#javascriptnodejs" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>npm<span class="w"> </span>install<span class="w"> </span>@ubclab/client
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">UBCLabClient</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;@ubclab/client&#39;</span><span class="p">;</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">client</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">UBCLabClient</span><span class="p">({</span>
+<span class="w">    </span><span class="nx">baseURL</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;https://api.ubclab.example.com/v1&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">token</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;seu_token_aqui&#39;</span>
+<span class="p">});</span>
+
+<span class="c1">// Listar datasets</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">datasets</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">client</span><span class="p">.</span><span class="nx">datasets</span><span class="p">.</span><span class="nx">list</span><span class="p">();</span>
+</code></pre></div>
+<h2 id="ambiente-de-testes">🧪 Ambiente de Testes<a class="headerlink" href="#ambiente-de-testes" title="Permanent link">&para;</a></h2>
+<h3 id="sandbox">Sandbox<a class="headerlink" href="#sandbox" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>https://api-sandbox.ubclab.example.com/v1
+</code></pre></div>
+<ul>
+<li>Dados de teste pré-carregados</li>
+<li>Reset diário às 00:00 UTC</li>
+<li>Todas as funcionalidades disponíveis</li>
+</ul>
+<hr />
+<p><em>Para exemplos práticos de uso da API, consulte a seção <a href="../exemplos/">Exemplos</a>.</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar ao topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2024 UBC Lab BD
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "Mais 1 nesta p\u00e1gina", "search.result.more.other": "Mais # nesta p\u00e1gina", "search.result.none": "Nenhum resultado encontrado", "search.result.one": "1 resultado encontrado", "search.result.other": "# resultados encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.50899def.min.js"></script>
+      
+    
+  </body>
+</html>
