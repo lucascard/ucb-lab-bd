@@ -331,3 +331,80 @@ CREATE TABLE IF NOT EXISTS deliveries (
     CONSTRAINT fk_deliveries_delivery_personnel FOREIGN KEY (delivery_person_id) REFERENCES delivery_personnel(user_id) ON DELETE SET NULL ON UPDATE NO ACTION,
     CONSTRAINT fk_deliveries_addresses FOREIGN KEY (shipping_address_id) REFERENCES addresses(id) ON DELETE RESTRICT ON UPDATE NO ACTION
 );
+
+-- =====================================================================
+-- Seção 7: Carrinho de Compras (Nova Seção)
+-- =====================================================================
+
+-- Tabela para armazenar os itens no carrinho de compras de um cliente.
+-- Esta tabela é transitória; seus registros são normalmente excluídos
+-- após a conclusão de um pedido.
+CREATE TABLE IF NOT EXISTS customer_cart_items (
+    customer_id BIGINT NOT NULL,
+    product_variant_id BIGINT NOT NULL,
+    quantity INT UNSIGNED NOT NULL,
+    created_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    
+    -- Chave primária composta garante que um cliente só tenha uma linha por variante de produto.
+    PRIMARY KEY (customer_id, product_variant_id), 
+    
+    -- Chave estrangeira para o cliente. Se o cliente for excluído, seu carrinho também é.
+    CONSTRAINT fk_cart_items_customers FOREIGN KEY (customer_id) REFERENCES customers(user_id) ON DELETE CASCADE ON UPDATE NO ACTION,
+    
+    -- Chave estrangeira para a variante do produto. Se a variante for excluída, ela some dos carrinhos.
+    CONSTRAINT fk_cart_items_product_variants FOREIGN KEY (product_variant_id) REFERENCES product_variants(id) ON DELETE CASCADE ON UPDATE NO ACTION,
+
+    -- Garante que a quantidade seja sempre positiva.
+    CONSTRAINT chk_cart_item_quantity CHECK (quantity > 0)
+);
+
+-- =====================================================================
+-- Seção 8: Avaliação (Novissíma Seção)
+-- =====================================================================
+
+-- Tabela para armazena avaliações de diversas entidades.
+-- Um usuário pode avaliar produtos, pedidos, farmácias, entregas, outros usuários ou o sistema.
+CREATE TABLE IF NOT EXISTS reviews (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    
+    -- FK para a tabela 'users'. Identifica QUEM está fazendo a avaliação.
+    reviewer_id BIGINT NOT NULL,
+    
+    -- A nota da avaliação (ex: 1 a 5 estrelas).
+    rating TINYINT UNSIGNED NOT NULL,
+    
+    -- Comentário opcional em texto.
+    comment TEXT,
+    
+    -- O tipo de entidade que está sendo avaliada.
+    reviewable_type ENUM(
+        'PRODUCT_VARIANT', 
+        'ORDER', 
+        'DELIVERY', 
+        'PHARMACY', 
+        'USER', -- Para avaliar um cliente, um entregador ou um funcionário.
+        'SYSTEM'  -- Para avaliação geral da plataforma/marketplace.
+    ) NOT NULL,
+    
+    -- O ID da entidade que está sendo avaliada (ex: o ID do produto, o ID do pedido, etc.).
+    -- É NULLABLE para casos como avaliação do 'SYSTEM', que não tem um ID específico.
+    reviewable_id BIGINT, 
+    
+    -- Data da criação da avaliação.
+    created_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+
+    -- Chave estrangeira para o autor da avaliação. Se o usuário for excluído, suas avaliações também serão.
+    CONSTRAINT fk_reviews_reviewer FOREIGN KEY (reviewer_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE NO ACTION,
+    
+    -- Garante que a nota da avaliação esteja sempre entre 1 e 5.
+    CONSTRAINT chk_rating_range CHECK (rating >= 1 AND rating <= 5),
+
+    -- Garante que o ID da entidade seja fornecido, a menos que seja uma avaliação do sistema.
+    CONSTRAINT chk_reviewable_id CHECK (
+        (reviewable_type != 'SYSTEM' AND reviewable_id IS NOT NULL) OR
+        (reviewable_type = 'SYSTEM')
+    ),
+
+    -- Índice para buscar todas as avaliações de um item específico de forma muito rápida.
+    INDEX idx_reviewable (reviewable_type, reviewable_id)
+);
