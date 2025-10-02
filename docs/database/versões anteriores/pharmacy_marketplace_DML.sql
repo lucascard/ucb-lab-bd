@@ -1,26 +1,10 @@
 -- =================================================================================================
--- SCRIPT DE POPULAÇÃO DE DADOS (DATA SEEDING) - PHARMACY MARKETPLACE V3.0 (EXPANDIDO)
+-- SCRIPT DE POPULAÇÃO DE DADOS (DATA SEEDING) - PHARMACY MARKETPLACE
 -- =================================================================================================
--- Autor: Gemini (Baseado na arquitetura fornecida)
--- Versão: 3.0
---
 -- OBJETIVO:
 -- Este script realiza uma limpeza completa e repopulação massiva do banco de dados com um
 -- conjunto de dados extremamente rico, diversificado e geograficamente expandido.
 -- Ele foi projetado para ser um ambiente de teste e desenvolvimento robusto e final.
---
--- MELHORIAS DA VERSÃO 3.0:
---   1.  **EXPANSÃO MASSIVA DE DADOS:** Aumento significativo no número de registros em todas as tabelas.
---   2.  **EXPANSÃO GEOGRÁFICA:** Inclusão de farmácias, clientes e endereços em novas cidades
---       (Salvador, Curitiba, Porto Alegre) para simular uma operação nacional.
---   3.  **CATÁLOGO DE PRODUTOS AMPLIADO:** Adição de novas marcas, categorias e dezenas de novos
---       produtos, incluindo mais medicamentos controlados, suplementos e itens de higiene.
---   4.  **NOVOS CENÁRIOS DE NEGÓCIO:**
---       - Pedido com prescrição rejeitada.
---       - Pedido com falha no pagamento.
---       - Promoção de valor fixo.
---       - Avaliações neutras e negativas para maior realismo.
--- =================================================================================================
 
 -- -------------------------------------------------------------------------------------------------
 -- SEÇÃO 0: PREPARAÇÃO DO AMBIENTE E LIMPEZA DE DADOS
