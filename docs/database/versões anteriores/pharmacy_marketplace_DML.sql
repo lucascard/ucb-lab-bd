@@ -76,7 +76,6 @@ INSERT INTO `categories` (`id`, `name`, `parent_id`) VALUES
 -- -------------------------------------------------------------------------------------------------
 -- SEÇÃO 2: ENTIDADES CENTRAIS (EXPANSÃO GEOGRÁFICA)
 -- -------------------------------------------------------------------------------------------------
--- Endereços Expandidos
 INSERT INTO `addresses` (`id`, `street`, `complement`, `neighborhood`, `city`, `state`, `postal_code`) VALUES
 (1, 'Avenida Paulista, 1500', 'Andar 10', 'Bela Vista', 'São Paulo', 'SP', '01310-200'),
 (2, 'Rua da Consolação, 900', NULL, 'Consolação', 'São Paulo', 'SP', '01302-000'),
@@ -88,7 +87,6 @@ INSERT INTO `addresses` (`id`, `street`, `complement`, `neighborhood`, `city`, `
 (8, 'Rua das Flores, 100', 'Apto 101', 'Centro', 'Curitiba', 'PR', '80010-100'),
 (9, 'Avenida Borges de Medeiros, 500', 'Conjunto 303', 'Centro Histórico', 'Porto Alegre', 'RS', '90020-020');
 
--- Farmácias Expandidas
 INSERT INTO `pharmacies` (`id`, `legal_name`, `trade_name`, `cnpj`, `phone`, `email`) VALUES
 (1, 'Pharma-Life Comércio de Medicamentos Ltda.', 'Pharma-Life Matriz', '11222333000144', '1133334444', 'contato@pharmalife.com'),
 (2, 'Drogaria Bem-Estar e Saúde S.A.', 'Drogaria Bem-Estar', '55666777000188', '11988887777', 'atendimento@bemestar.com'),
@@ -99,7 +97,6 @@ INSERT INTO `pharmacies` (`id`, `legal_name`, `trade_name`, `cnpj`, `phone`, `em
 INSERT INTO `pharmacy_locations` (`pharmacy_id`, `address_id`, `is_headquarters`) VALUES
 (1, 1, TRUE), (2, 2, TRUE), (3, 6, TRUE), (4, 7, TRUE), (5, 9, TRUE);
 
--- Usuários e Perfis Expandidos
 INSERT INTO `users` (`id`, `public_id`, `email`, `hashed_password`, `phone_number`) VALUES
 (1, UUID_TO_BIN(UUID()), 'ana.silva@email.com', '$2a$10$fPL.8g545yCMj251y4.yX.C8zXb.2T2.L1Qz1Qz1Qz1Qz1Qz1', '11911112222'),
 (2, UUID_TO_BIN(UUID()), 'bruno.costa@pharmalife.com', '$2a$10$fPL.8g545yCMj251y4.yX.C8zXb.2T2.L1Qz1Qz1Qz1Qz1Qz1', '11933334444'),
@@ -180,7 +177,6 @@ INSERT INTO `customer_cart_items` (`customer_id`, `product_variant_id`, `quantit
 -- -------------------------------------------------------------------------------------------------
 -- SEÇÃO 5: SIMULAÇÃO DE FLUXOS DE NEGÓCIO (PEDIDOS EXPANDIDOS)
 -- -------------------------------------------------------------------------------------------------
--- Pedidos 1-4 (do script anterior, mantidos para consistência)
 INSERT INTO `orders` (`id`, `public_id`, `order_code`, `customer_id`, `pharmacy_id`, `order_status`, `subtotal_amount`, `shipping_amount`, `total_amount`, `created_at`, `updated_at`) VALUES
 (1, UUID_TO_BIN(UUID()), 'MKP-2025-00001', 1, 2, 'DELIVERED', 29.98, 5.00, 34.98, '2025-09-25 10:00:00', '2025-09-26 14:00:00');
 INSERT INTO `order_items` (`order_id`, `product_variant_id`, `quantity`, `unit_price`) VALUES (1, 1, 2, 14.99);
@@ -209,7 +205,6 @@ INSERT INTO `orders` (`id`, `public_id`, `order_code`, `customer_id`, `pharmacy_
 INSERT INTO `order_items` (`order_id`, `product_variant_id`, `quantity`, `unit_price`) VALUES (4, 6, 1, 35.90);
 INSERT INTO `payments` (`order_id`, `amount`, `payment_method`, `status`) VALUES (4, 40.90, 'CREDIT_CARD', 'PENDING');
 
--- Pedido 5: NOVO - Compra inter-estadual com promoção (João Pereira | FarmaSsa | Itens Diversos) - ENVIADO
 INSERT INTO `promotions` (`id`, `name`, `discount_type`, `discount_value`, `start_date`, `end_date`, `pharmacy_id`) VALUES
 (2, 'Leve 2 Cremes Dentais por R$10', 'FIXED_AMOUNT', 10.00, NOW() - INTERVAL 5 DAY, NOW() + INTERVAL 5 DAY, 4);
 INSERT INTO `promotion_targets` (`promotion_id`, `target_type`, `target_id`) VALUES (2, 'PRODUCT', 7);
@@ -224,7 +219,6 @@ INSERT INTO `deliveries` (`id`, `order_id`, `delivery_person_id`, `shipping_addr
 INSERT INTO `prescriptions` (`id`, `order_id`, `prescription_code`, `doctor_crm`, `status`, `validated_by`, `validated_at`) VALUES
 (2, 5, 'REC2025-ABC-123', 'BA654321', 'VALIDATED', 7, NOW() - INTERVAL 2 HOUR);
 
--- Pedido 6: NOVO - Prescrição Rejeitada (João Pereira | SulFarma | Clonazepam) - CANCELADO
 INSERT INTO `orders` (`id`, `public_id`, `order_code`, `customer_id`, `pharmacy_id`, `order_status`, `subtotal_amount`, `shipping_amount`, `total_amount`) VALUES
 (6, UUID_TO_BIN(UUID()), 'MKP-2025-00006', 6, 5, 'CANCELLED', 17.50, 8.00, 25.50);
 INSERT INTO `order_items` (`order_id`, `product_variant_id`, `quantity`, `unit_price`) VALUES (6, 11, 1, 17.50);
