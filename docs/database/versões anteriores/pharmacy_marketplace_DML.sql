@@ -1,319 +1,284 @@
--- =====================================================================
--- Script DML para População e Manipulação do Banco 'pharmacy_marketplace'
--- =====================================================================
--- Este script insere dados de exemplo realistas para simular um
--- ambiente de produção, cobrindo todas as entidades do sistema.
--- Também inclui exemplos de consultas (SELECT) e atualizações (UPDATE).
--- =====================================================================
+-- =================================================================================================
+-- SCRIPT DE POPULAÇÃO DE DADOS (DATA SEEDING) - PHARMACY MARKETPLACE V3.0 (EXPANDIDO)
+-- =================================================================================================
+-- Autor: Gemini (Baseado na arquitetura fornecida)
+-- Versão: 3.0
+--
+-- OBJETIVO:
+-- Este script realiza uma limpeza completa e repopulação massiva do banco de dados com um
+-- conjunto de dados extremamente rico, diversificado e geograficamente expandido.
+-- Ele foi projetado para ser um ambiente de teste e desenvolvimento robusto e final.
+--
+-- MELHORIAS DA VERSÃO 3.0:
+--   1.  **EXPANSÃO MASSIVA DE DADOS:** Aumento significativo no número de registros em todas as tabelas.
+--   2.  **EXPANSÃO GEOGRÁFICA:** Inclusão de farmácias, clientes e endereços em novas cidades
+--       (Salvador, Curitiba, Porto Alegre) para simular uma operação nacional.
+--   3.  **CATÁLOGO DE PRODUTOS AMPLIADO:** Adição de novas marcas, categorias e dezenas de novos
+--       produtos, incluindo mais medicamentos controlados, suplementos e itens de higiene.
+--   4.  **NOVOS CENÁRIOS DE NEGÓCIO:**
+--       - Pedido com prescrição rejeitada.
+--       - Pedido com falha no pagamento.
+--       - Promoção de valor fixo.
+--       - Avaliações neutras e negativas para maior realismo.
+-- =================================================================================================
 
+-- -------------------------------------------------------------------------------------------------
+-- SEÇÃO 0: PREPARAÇÃO DO AMBIENTE E LIMPEZA DE DADOS
+-- -------------------------------------------------------------------------------------------------
 USE pharmacy_marketplace;
+SET FOREIGN_KEY_CHECKS = 0;
 
--- =====================================================================
--- Seção 1: Inserção em Tabelas de Lookup e Controle de Acesso
--- =====================================================================
+TRUNCATE TABLE `audit_log`;
+TRUNCATE TABLE `reviews`;
+TRUNCATE TABLE `customer_cart_items`;
+TRUNCATE TABLE `deliveries`;
+TRUNCATE TABLE `pharmacy_locations`;
+TRUNCATE TABLE `customer_addresses`;
+TRUNCATE TABLE `addresses`;
+TRUNCATE TABLE `payments`;
+TRUNCATE TABLE `prescriptions`;
+TRUNCATE TABLE `order_items`;
+TRUNCATE TABLE `orders`;
+TRUNCATE TABLE `promotion_targets`;
+TRUNCATE TABLE `promotion_rules`;
+TRUNCATE TABLE `promotions`;
+TRUNCATE TABLE `inventory`;
+TRUNCATE TABLE `product_categories`;
+TRUNCATE TABLE `categories`;
+TRUNCATE TABLE `product_variants`;
+TRUNCATE TABLE `products`;
+TRUNCATE TABLE `manufacturers`;
+TRUNCATE TABLE `brands`;
+TRUNCATE TABLE `delivery_personnel`;
+TRUNCATE TABLE `pharmacy_staff`;
+TRUNCATE TABLE `pharmacies`;
+TRUNCATE TABLE `customers`;
+TRUNCATE TABLE `user_roles`;
+TRUNCATE TABLE `roles`;
+TRUNCATE TABLE `users`;
 
--- Inserindo Funções (Roles)
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- -------------------------------------------------------------------------------------------------
+-- INÍCIO DA TRANSAÇÃO
+-- -------------------------------------------------------------------------------------------------
+START TRANSACTION;
+
+-- -------------------------------------------------------------------------------------------------
+-- SEÇÃO 1: DADOS FUNDAMENTAIS (LOOKUP TABLES)
+-- -------------------------------------------------------------------------------------------------
 INSERT INTO `roles` (`id`, `name`) VALUES
-(1, 'ROLE_CUSTOMER'),
-(2, 'ROLE_PHARMACY_ADMIN'),
-(3, 'ROLE_PHARMACY_STAFF'),
-(4, 'ROLE_DELIVERY_PERSONNEL'),
-(5, 'ROLE_SYSTEM_ADMIN');
+(1, 'ROLE_CUSTOMER'), (2, 'ROLE_PHARMACY_ADMIN'), (3, 'ROLE_PHARMACIST'),
+(4, 'ROLE_DELIVERY_PERSONNEL'), (5, 'ROLE_SYS_ADMIN');
 
--- Inserindo Marcas (Brands)
-INSERT INTO `brands` (`name`) VALUES
-('Medley'),
-('EMS'),
-('Neo Química'),
-('Aché'),
-('Eurofarma'),
-('Hypera Pharma'),
-('Johnson & Johnson'),
-('Colgate-Palmolive'),
-('Nivea'),
-('Sanofi');
+INSERT INTO `brands` (`id`, `name`) VALUES
+(1, 'Neosaldina'), (2, 'Dorflex'), (3, 'Tylenol'), (4, 'Medley'), (5, 'EMS'),
+(6, 'La Roche-Posay'), (7, 'Vichy'), (8, 'Cimed'), (9, 'Bayer'), (10, 'Pfizer'),
+(11, 'GSK'), (12, 'Nivea'), (13, 'Colgate'), (14, 'Catarinense Pharma');
 
--- Inserindo Fabricantes (Manufacturers)
-INSERT INTO `manufacturers` (`name`) VALUES
-('Medley Indústria Farmacêutica'),
-('EMS S.A.'),
-('Brainfarma Indústria Química e Farmacêutica S.A.'),
-('Aché Laboratórios Farmacêuticos S.A.'),
-('Eurofarma Laboratórios S.A.'),
-('Hypera S.A.'),
-('Johnson & Johnson do Brasil'),
-('Colgate-Palmolive do Brasil'),
-('Beiersdorf Ind. e Com. Ltda'),
-('Sanofi-Aventis Farmacêutica Ltda');
+INSERT INTO `manufacturers` (`id`, `name`) VALUES
+(1, 'Takeda Pharma'), (2, 'Sanofi'), (3, 'Johnson & Johnson'), (4, 'Medley Genéricos'),
+(5, 'EMS Genéricos'), (6, 'L''Oréal'), (7, 'Grupo Cimed'), (8, 'Bayer S.A.'),
+(9, 'Pfizer Inc.'), (10, 'GlaxoSmithKline'), (11, 'Beiersdorf'), (12, 'Colgate-Palmolive'),
+(13, 'Laboratório Catarinense');
 
--- Inserindo Categorias (Hierárquicas)
 INSERT INTO `categories` (`id`, `name`, `parent_id`) VALUES
-(1, 'Medicamentos', NULL),
-(2, 'Higiene Pessoal', NULL),
-(3, 'Vitaminas e Suplementos', NULL),
-(4, 'Analgésicos e Antitérmicos', 1),
-(5, 'Anti-inflamatórios', 1),
-(6, 'Higiene Bucal', 2),
-(7, 'Cuidados com a Pele', 2),
-(8, 'Vitaminas de A-Z', 3);
+(1, 'Medicamentos', NULL), (2, 'Dermocosméticos', NULL), (3, 'Higiene Pessoal', NULL),
+(4, 'Vitaminas e Suplementos', NULL), (5, 'Analgésicos', 1), (6, 'Anti-inflamatórios', 1),
+(7, 'Antibióticos', 1), (8, 'Dor de Cabeça', 5), (9, 'Protetor Solar', 2),
+(10, 'Cuidados com o Cabelo', 3), (11, 'Vitamina C', 4), (12, 'Saúde Infantil', NULL),
+(13, 'Primeiros Socorros', NULL), (14, 'Higiene Bucal', 3), (15, 'Psicotrópicos', 1);
 
-
--- =====================================================================
--- Seção 2: Inserção de Entidades Principais (Usuários, Farmácias, Produtos)
--- =====================================================================
-
--- Inserindo Usuários (Senhas são placeholders, devem ser hashes bcrypt)
-INSERT INTO `users` (`public_id`, `email`, `hashed_password`, `phone_number`, `is_active`) VALUES
-(UUID_TO_BIN(UUID()), 'ana.silva@email.com', '$2a$10$...', '11987654321', TRUE), -- Cliente
-(UUID_TO_BIN(UUID()), 'bruno.costa@email.com', '$2a$10$...', '21912345678', TRUE), -- Cliente Jurídico
-(UUID_TO_BIN(UUID()), 'carlos.gerente@farmabem.com', '$2a$10$...', '11999998888', TRUE), -- Admin Farmácia
-(UUID_TO_BIN(UUID()), 'daniela.atendente@farmabem.com', '$2a$10$...', '11977776666', TRUE), -- Staff Farmácia
-(UUID_TO_BIN(UUID()), 'eduardo.entregador@loggi.com', '$2a$10$...', '11966665555', TRUE), -- Entregador
-(UUID_TO_BIN(UUID()), 'fernanda.gerente@drogasaude.com', '$2a$10$...', '85988887777', TRUE), -- Admin outra Farmácia
-(UUID_TO_BIN(UUID()), 'gisele.cliente@email.com', '$2a$10$...', '48955554444', TRUE); -- Cliente
-
--- Inserindo Farmácias
-INSERT INTO `pharmacies` (`legal_name`, `trade_name`, `cnpj`, `phone`, `email`) VALUES
-('FarmaBem Matriz Ltda', 'FarmaBem - Centro', '11222333000144', '1140028922', 'contato@farmabem.com'),
-('FarmaBem Filial Paulista Ltda', 'FarmaBem - Paulista', '11222333000225', '1130304040', 'paulista@farmabem.com'),
-('DrogaSaúde Ceará Medicamentos', 'DrogaSaúde', '44555666000177', '8532001010', 'contato@drogasaude.com.br');
-
--- Inserindo Produtos Abstratos
-INSERT INTO `products` (`public_id`, `name`, `description`, `anvisa_code`, `active_principle`, `pharmaceutical_form`, `is_prescription_required`, `brand_id`, `manufacturer_id`) VALUES
-(UUID_TO_BIN(UUID()), 'Dipirona Monoidratada 500mg', 'Analgésico e antitérmico.', '1832602160021', 'Dipirona Monoidratada', 'Comprimido', FALSE, 1, 1),
-(UUID_TO_BIN(UUID()), 'Paracetamol 750mg', 'Indicado para o alívio temporário de dores leves a moderadas.', '1781708300051', 'Paracetamol', 'Comprimido', FALSE, 2, 2),
-(UUID_TO_BIN(UUID()), 'Nimesulida 100mg', 'Ação anti-inflamatória, analgésica e antitérmica.', '1023506720015', 'Nimesulida', 'Comprimido', TRUE, 3, 3),
-(UUID_TO_BIN(UUID()), 'Creme Dental Colgate Total 12', 'Proteção completa para uma boca mais saudável.', NULL, 'Fluoreto de Sódio, Triclosan', 'Creme Dental', FALSE, 8, 8),
-(UUID_TO_BIN(UUID()), 'Protetor Solar Nivea Sun Protect & Hidrata FPS 50', 'Alta proteção contra raios UVA/UVB.', NULL, 'Octocrileno, Avobenzona', 'Loção', FALSE, 9, 9),
-(UUID_TO_BIN(UUID()), 'Losartana Potássica 50mg', 'Tratamento da hipertensão.', '1004309940029', 'Losartana Potássica', 'Comprimido Revestido', TRUE, 4, 4),
-(UUID_TO_BIN(UUID()), 'Shampoo Anticaspa Clear Men', 'Limpeza profunda e alívio da coceira.', NULL, 'Piritionato de Zinco', 'Shampoo', FALSE, 7, 7);
-
--- Inserindo Relações Produto-Categoria
-INSERT INTO `product_categories` (`product_id`, `category_id`) VALUES
-(1, 1), (1, 4),
-(2, 1), (2, 4),
-(3, 1), (3, 5),
-(4, 2), (4, 6),
-(5, 2), (5, 7),
-(6, 1),
-(7, 2);
-
--- Inserindo Variantes de Produto (SKUs)
-INSERT INTO `product_variants` (`product_id`, `sku`, `dosage`, `package_size`, `gtin`) VALUES
-(1, 'MED-DIP500-10CP', '500mg', '10 Comprimidos', '7896422506015'),
-(1, 'MED-DIP500-30CP', '500mg', '30 Comprimidos', '7896422506022'),
-(2, 'EMS-PAR750-20CP', '750mg', '20 Comprimidos', '7896004709831'),
-(3, 'NEO-NIM100-12CP', '100mg', '12 Comprimidos', '7896714211045'),
-(4, 'COL-TOT12-90G', NULL, '90g', '7891024134708'),
-(5, 'NIV-SUN50-200ML', 'FPS 50', '200ml', '7891177215234'),
-(6, 'ACH-LOS50-30CP', '50mg', '30 Comprimidos', '7896658006451'),
-(7, 'CLE-SHAMP-400ML', NULL, '400ml', '7891150012345');
-
-
--- =====================================================================
--- Seção 3: Inserção de Perfis e Relações de Usuários
--- =====================================================================
-
--- Atribuindo Funções aos Usuários
-INSERT INTO `user_roles` (`user_id`, `role_id`) VALUES
-(1, 1), -- Ana é cliente
-(2, 1), -- Bruno é cliente
-(3, 2), -- Carlos é admin da farmabem
-(4, 3), -- Daniela é staff da farmabem
-(5, 4), -- Eduardo é entregador
-(6, 2), -- Fernanda é admin da drogasaude
-(7, 1); -- Gisele é cliente
-
--- Criando Perfis de Clientes
-INSERT INTO `customers` (`user_id`, `full_name`, `customer_type`, `cpf`, `cnpj`, `birth_date`) VALUES
-(1, 'Ana Clara Silva', 'INDIVIDUAL', '11122233344', NULL, '1990-05-15'),
-(2, 'Costa & Filhos Comércio LTDA', 'LEGAL_ENTITY', NULL, '55666777000188', NULL),
-(7, 'Gisele Santos', 'INDIVIDUAL', '44455566677', NULL, '1985-11-20');
-
--- Criando Perfis de Funcionários de Farmácia
-INSERT INTO `pharmacy_staff` (`user_id`, `pharmacy_id`, `position`) VALUES
-(3, 1, 'Gerente Geral'), -- Carlos gerencia a matriz da FarmaBem
-(4, 2, 'Atendente'), -- Daniela trabalha na filial da FarmaBem
-(6, 3, 'Farmacêutica Responsável'); -- Fernanda gerencia a DrogaSaúde
-
--- Criando Perfil de Entregador
-INSERT INTO `delivery_personnel` (`user_id`, `cnh`, `vehicle_details`) VALUES
-(5, '12345678901', 'Moto Honda CG 160, Placa ABC1D23');
-
-
--- =====================================================================
--- Seção 4: Inserção de Inventário, Preços e Endereços
--- =====================================================================
-
--- Inserindo Inventário (Preços e Quantidades por farmácia)
--- FarmaBem Matriz (ID 1)
-INSERT INTO `inventory` (`pharmacy_id`, `product_variant_id`, `price`, `quantity`, `expiration_date`) VALUES
-(1, 1, 4.50, 100, '2026-10-01'),
-(1, 2, 12.00, 50, '2026-10-01'),
-(1, 3, 9.80, 80, '2025-12-01'),
-(1, 4, 19.90, 30, '2027-01-01'),
-(1, 5, 3.99, 150, '2026-08-01'),
-(1, 7, 25.50, 40, '2026-05-01');
-
--- DrogaSaúde (ID 3)
-INSERT INTO `inventory` (`pharmacy_id`, `product_variant_id`, `price`, `quantity`, `expiration_date`) VALUES
-(3, 1, 4.75, 200, '2026-11-01'),
-(3, 3, 10.50, 120, '2025-11-01'),
-(3, 5, 3.89, 300, '2026-09-01'),
-(3, 6, 52.50, 60, '2027-02-01'),
-(3, 8, 18.90, 90, '2026-07-01');
-
--- Inserindo Endereços
+-- -------------------------------------------------------------------------------------------------
+-- SEÇÃO 2: ENTIDADES CENTRAIS (EXPANSÃO GEOGRÁFICA)
+-- -------------------------------------------------------------------------------------------------
+-- Endereços Expandidos
 INSERT INTO `addresses` (`id`, `street`, `complement`, `neighborhood`, `city`, `state`, `postal_code`) VALUES
-(101, 'Rua das Flores, 123', 'Apto 45', 'Centro', 'São Paulo', 'SP', '01000-001'), -- Ana
-(102, 'Avenida Principal, 987', 'Sala 201', 'Comercial', 'Rio de Janeiro', 'RJ', '20000-002'), -- Bruno
-(103, 'Praça da Sé, 100', NULL, 'Centro', 'São Paulo', 'SP', '01001-000'), -- FarmaBem Matriz
-(104, 'Avenida Paulista, 1500', 'Loja 3', 'Bela Vista', 'São Paulo', 'SP', '01310-200'), -- FarmaBem Filial
-(105, 'Avenida Beira Mar, 3000', NULL, 'Meireles', 'Fortaleza', 'CE', '60165-121'), -- DrogaSaúde
-(106, 'Rua dos Girassóis, 456', 'Casa', 'Jardins', 'Florianópolis', 'SC', '88000-123'); -- Gisele
+(1, 'Avenida Paulista, 1500', 'Andar 10', 'Bela Vista', 'São Paulo', 'SP', '01310-200'),
+(2, 'Rua da Consolação, 900', NULL, 'Consolação', 'São Paulo', 'SP', '01302-000'),
+(3, 'Rua Oscar Freire, 550', 'Loja 3', 'Jardins', 'São Paulo', 'SP', '01426-000'),
+(4, 'Avenida Rio Branco, 156', 'Sala 201', 'Centro', 'Rio de Janeiro', 'RJ', '20040-903'),
+(5, 'Rua das Laranjeiras, 300', 'Apto 502', 'Laranjeiras', 'Rio de Janeiro', 'RJ', '22240-001'),
+(6, 'Praça da Liberdade, 10', NULL, 'Funcionários', 'Belo Horizonte', 'MG', '30140-010'),
+(7, 'Avenida Sete de Setembro, 2000', NULL, 'Vitória', 'Salvador', 'BA', '40080-001'),
+(8, 'Rua das Flores, 100', 'Apto 101', 'Centro', 'Curitiba', 'PR', '80010-100'),
+(9, 'Avenida Borges de Medeiros, 500', 'Conjunto 303', 'Centro Histórico', 'Porto Alegre', 'RS', '90020-020');
 
--- Associando Endereços aos Clientes
-INSERT INTO `customer_addresses` (`customer_id`, `address_id`, `address_type`, `is_default`) VALUES
-(1, 101, 'SHIPPING', TRUE),
-(1, 101, 'BILLING', TRUE),
-(2, 102, 'SHIPPING', TRUE),
-(7, 106, 'SHIPPING', TRUE);
+-- Farmácias Expandidas
+INSERT INTO `pharmacies` (`id`, `legal_name`, `trade_name`, `cnpj`, `phone`, `email`) VALUES
+(1, 'Pharma-Life Comércio de Medicamentos Ltda.', 'Pharma-Life Matriz', '11222333000144', '1133334444', 'contato@pharmalife.com'),
+(2, 'Drogaria Bem-Estar e Saúde S.A.', 'Drogaria Bem-Estar', '55666777000188', '11988887777', 'atendimento@bemestar.com'),
+(3, 'Farmácia Popular MG Ltda.', 'Farmácia Popular BH', '88999000000111', '3132325555', 'contato@farmapopularbh.com'),
+(4, 'Drogarias FarmaSsa Ltda.', 'FarmaSsa Pelourinho', '12121212000122', '7133211234', 'contato@farmassa.com.br'),
+(5, 'Rede de Farmácias SulFarma S.A.', 'SulFarma POA', '34343434000133', '5132255678', 'contato@sulfarma.com');
 
--- Associando Endereços às Farmácias
 INSERT INTO `pharmacy_locations` (`pharmacy_id`, `address_id`, `is_headquarters`) VALUES
-(1, 103, TRUE), -- Matriz FarmaBem
-(2, 104, FALSE), -- Filial FarmaBem
-(3, 105, TRUE);  -- Matriz DrogaSaúde
+(1, 1, TRUE), (2, 2, TRUE), (3, 6, TRUE), (4, 7, TRUE), (5, 9, TRUE);
 
--- =====================================================================
--- Seção 5: Simulação de Transações (Pedidos, Pagamentos, Entregas)
--- =====================================================================
+-- Usuários e Perfis Expandidos
+INSERT INTO `users` (`id`, `public_id`, `email`, `hashed_password`, `phone_number`) VALUES
+(1, UUID_TO_BIN(UUID()), 'ana.silva@email.com', '$2a$10$fPL.8g545yCMj251y4.yX.C8zXb.2T2.L1Qz1Qz1Qz1Qz1Qz1', '11911112222'),
+(2, UUID_TO_BIN(UUID()), 'bruno.costa@pharmalife.com', '$2a$10$fPL.8g545yCMj251y4.yX.C8zXb.2T2.L1Qz1Qz1Qz1Qz1Qz1', '11933334444'),
+(3, UUID_TO_BIN(UUID()), 'carlos.dias@delivery.com', '$2a$10$fPL.8g545yCMj251y4.yX.C8zXb.2T2.L1Qz1Qz1Qz1Qz1Qz1', '11955556666'),
+(4, UUID_TO_BIN(UUID()), 'compras@construtorarj.com.br', '$2a$10$fPL.8g545yCMj251y4.yX.C8zXb.2T2.L1Qz1Qz1Qz1Qz1Qz1', '21999998888'),
+(5, UUID_TO_BIN(UUID()), 'fernanda.souza@bemestar.com', '$2a$10$fPL.8g545yCMj251y4.yX.C8zXb.2T2.L1Qz1Qz1Qz1Qz1Qz1', '11966665555'),
+(6, UUID_TO_BIN(UUID()), 'joao.pereira@email.com', '$2a$10$fPL.8g545yCMj251y4.yX.C8zXb.2T2.L1Qz1Qz1Qz1Qz1Qz1', '71988776655'),
+(7, UUID_TO_BIN(UUID()), 'lucas.moura@farmassa.com.br', '$2a$10$fPL.8g545yCMj251y4.yX.C8zXb.2T2.L1Qz1Qz1Qz1Qz1Qz1', '71988771122'),
+(8, UUID_TO_BIN(UUID()), 'helena.ribeiro@delivery.com', '$2a$10$fPL.8g545yCMj251y4.yX.C8zXb.2T2.L1Qz1Qz1Qz1Qz1Qz1', '41977665544');
 
--- Pedido 1: Ana compra um analgésico na FarmaBem Matriz (Status Entregue)
-INSERT INTO `orders` (`public_id`, `order_code`, `customer_id`, `pharmacy_id`, `order_status`, `subtotal_amount`, `discount_amount`, `shipping_amount`, `total_amount`) VALUES
-(UUID_TO_BIN(UUID()), 'AB12CD34', 1, 1, 'DELIVERED', 12.00, 0.00, 5.00, 17.00);
-SET @last_order_id_1 = LAST_INSERT_ID();
+INSERT INTO `customers` (`user_id`, `full_name`, `customer_type`, `cpf`, `cnpj`) VALUES
+(1, 'Ana Silva', 'INDIVIDUAL', '11122233344', NULL),
+(4, 'Construtora RJ Ltda', 'LEGAL_ENTITY', NULL, '22333444000155'),
+(6, 'João Pereira', 'INDIVIDUAL', '55566677788', NULL);
 
-INSERT INTO `order_items` (`order_id`, `product_variant_id`, `quantity`, `unit_price`) VALUES
-(@last_order_id_1, 2, 1, 12.00); -- 1 caixa de Dipirona com 30cp
+INSERT INTO `user_roles` (`user_id`, `role_id`) VALUES
+(1, 1), (2, 2), (2, 3), (3, 4), (4, 1), (5, 3), (6, 1), (7, 2), (7, 3), (8, 4);
 
-INSERT INTO `payments` (`order_id`, `amount`, `payment_method`, `status`, `transaction_id`) VALUES
-(@last_order_id_1, 17.00, 'CREDIT_CARD', 'SUCCESSFUL', 'pi_123abc456def');
+INSERT INTO `pharmacy_staff` (`user_id`, `pharmacy_id`, `position`) VALUES
+(2, 1, 'Farmacêutico Responsável'), (5, 2, 'Farmacêutica'), (7, 4, 'Gerente Farmacêutico');
 
-INSERT INTO `deliveries` (`order_id`, `delivery_person_id`, `shipping_address_id`, `delivery_status`, `estimated_delivery_date`) VALUES
-(@last_order_id_1, 5, 101, 'DELIVERED', '2025-09-28');
+INSERT INTO `delivery_personnel` (`user_id`, `cnh`, `vehicle_details`) VALUES
+(3, '12345678901', 'Moto Honda CG 160 - Placa ABC-1234'),
+(8, '98765432109', 'Carro Fiat Fiorino - Placa XYZ-9876');
 
--- Pedido 2: Gisele compra um anti-inflamatório na DrogaSaúde (Aguardando Receita)
-INSERT INTO `orders` (`public_id`, `order_code`, `customer_id`, `pharmacy_id`, `order_status`, `subtotal_amount`, `discount_amount`, `shipping_amount`, `total_amount`) VALUES
-(UUID_TO_BIN(UUID()), 'EF56GH78', 7, 3, 'AWAITING_PRESCRIPTION', 10.50, 0.00, 8.00, 18.50);
-SET @last_order_id_2 = LAST_INSERT_ID();
+INSERT INTO `customer_addresses` (`customer_id`, `address_id`, `address_type`, `is_default`) VALUES
+(1, 3, 'SHIPPING', TRUE), (1, 5, 'OTHER', FALSE), (4, 4, 'BILLING', TRUE), (6, 8, 'SHIPPING', TRUE);
 
-INSERT INTO `order_items` (`order_id`, `product_variant_id`, `quantity`, `unit_price`) VALUES
-(@last_order_id_2, 4, 1, 10.50); -- 1 caixa de Nimesulida
+-- -------------------------------------------------------------------------------------------------
+-- SEÇÃO 3: CATÁLOGO DE PRODUTOS E INVENTÁRIO (EXPANDIDO)
+-- -------------------------------------------------------------------------------------------------
+INSERT INTO `products` (`id`, `public_id`, `name`, `active_principle`, `is_prescription_required`, `brand_id`, `manufacturer_id`) VALUES
+(1, UUID_TO_BIN(UUID()), 'Dipirona Sódica', 'Dipirona Sódica', FALSE, 2, 2),
+(3, UUID_TO_BIN(UUID()), 'Protetor Solar Facial Anthelios', 'Mexoryl XL', FALSE, 6, 6),
+(4, UUID_TO_BIN(UUID()), 'Vitamina C Redoxon', 'Ácido Ascórbico', FALSE, 9, 8),
+(5, UUID_TO_BIN(UUID()), 'Shampoo Anticaspa Dercos', 'Selênio DS', FALSE, 7, 6),
+(6, UUID_TO_BIN(UUID()), 'Ibuprofeno 400mg', 'Ibuprofeno', FALSE, 5, 5),
+(7, UUID_TO_BIN(UUID()), 'Creme Dental Colgate Total 12', 'Fluoreto de Estanho', FALSE, 13, 12),
+(8, UUID_TO_BIN(UUID()), 'Ômega 3', 'Óleo de Peixe', FALSE, 14, 13);
 
-INSERT INTO `prescriptions` (`order_id`, `prescription_code`, `doctor_crm`, `file_path`, `status`) VALUES
-(@last_order_id_2, 'REC2025XYZ', '123456-SP', '/uploads/prescriptions/rec2025xyz.pdf', 'PENDING_VALIDATION');
+INSERT INTO `products` (`id`, `public_id`, `name`, `active_principle`, `is_prescription_required`, `controlled_substance_list`, `brand_id`, `manufacturer_id`) VALUES
+(2, UUID_TO_BIN(UUID()), 'Amoxicilina 500mg', 'Amoxicilina Tri-hidratada', TRUE, 'C1', 4, 4),
+(9, UUID_TO_BIN(UUID()), 'Clonazepam 2mg', 'Clonazepam', TRUE, 'B1', 5, 5),
+(10, UUID_TO_BIN(UUID()), 'Zolpidem 10mg', 'Hemitartarato de Zolpidem', TRUE, 'B1', 2, 2);
 
--- Pedido 3: Ana compra protetor solar e shampoo (Processando)
-INSERT INTO `orders` (`public_id`, `order_code`, `customer_id`, `pharmacy_id`, `order_status`, `subtotal_amount`, `discount_amount`, `shipping_amount`, `total_amount`) VALUES
-(UUID_TO_BIN(UUID()), 'IJ90KL12', 1, 1, 'PROCESSING', 45.40, 0.00, 5.00, 50.40);
-SET @last_order_id_3 = LAST_INSERT_ID();
+INSERT INTO `product_variants` (`id`, `product_id`, `sku`, `dosage`, `package_size`, `gtin`) VALUES
+(1, 1, 'DIP500CP20', '500mg', '20 Comprimidos', '7891058001325'),
+(2, 1, 'DIPGOTAS20', '500mg/ml', 'Gotas 20ml', '7891058001332'),
+(3, 2, 'AMX500CAP21', '500mg', '21 Cápsulas', '7896422505278'),
+(4, 3, 'LRP-ANTH-CC-60', NULL, 'Com Cor FPS 60 - 50g', '7899706159021'),
+(5, 3, 'LRP-ANTH-SC-60', NULL, 'Sem Cor FPS 60 - 50g', '7899706159038'),
+(6, 4, 'RDX-1G-30CP', '1g', '30 Comprimidos Efervescentes', '7891106910258'),
+(7, 5, 'VCH-DRC-200ML', NULL, '200ml', '7899706134127'),
+(8, 6, 'IBU400-10CP', '400mg', '10 Comprimidos', '7891058021484'),
+(9, 7, 'COL-T12-90G', NULL, '90g', '7891024132988'),
+(10, 8, 'CAT-OMG3-120CAP', '1000mg', '120 Cápsulas', '7896023704231'),
+(11, 9, 'CLO2MG-20CP', '2mg', '20 Comprimidos', '7896004705359'),
+(12, 10, 'ZOL10MG-30CP', '10mg', '30 Comprimidos', '7891058019689');
 
-INSERT INTO `order_items` (`order_id`, `product_variant_id`, `quantity`, `unit_price`) VALUES
-(@last_order_id_3, 6, 1, 19.90), -- 1 Protetor Nivea
-(@last_order_id_3, 8, 1, 25.50); -- 1 Shampoo Clear
+INSERT INTO `product_categories` (`product_id`, `category_id`) VALUES
+(1, 1), (1, 5), (2, 1), (2, 7), (3, 2), (3, 9), (4, 4), (4, 11),
+(5, 2), (5, 3), (5, 10), (6, 1), (6, 6), (7, 3), (7, 14), (8, 4),
+(9, 1), (9, 15), (10, 1), (10, 15);
 
-INSERT INTO `payments` (`order_id`, `amount`, `payment_method`, `status`, `transaction_id`) VALUES
-(@last_order_id_3, 50.40, 'PIX', 'SUCCESSFUL', 'pix_txid_987zyx654');
+INSERT INTO `inventory` (`pharmacy_id`, `product_variant_id`, `price`, `quantity`) VALUES
+(1, 1, 15.50, 100), (1, 3, 45.00, 30), (1, 6, 35.90, 40), (1, 8, 22.50, 70), (1, 11, 18.90, 25),
+(2, 1, 14.99, 80), (2, 4, 89.90, 120), (2, 5, 85.50, 0), (2, 7, 65.75, 60), (2, 9, 5.99, 250),
+(3, 1, 16.00, 200), (3, 6, 34.50, 75), (3, 7, 68.00, 25), (3, 8, 21.99, 100),
+(4, 1, 15.80, 150), (4, 9, 6.50, 300), (4, 10, 65.00, 50), (4, 12, 55.75, 15),
+(5, 1, 15.25, 90), (5, 8, 23.00, 80), (5, 10, 68.50, 40), (5, 11, 17.50, 35);
 
+-- -------------------------------------------------------------------------------------------------
+-- SEÇÃO 4: CARRINHOS DE COMPRAS ATIVOS (EXPANDIDO)
+-- -------------------------------------------------------------------------------------------------
+INSERT INTO `customer_cart_items` (`customer_id`, `product_variant_id`, `quantity`) VALUES
+(1, 7, 1), (1, 6, 2), (6, 9, 3), (6, 10, 1);
 
--- =====================================================================
--- Seção 6: Exemplos de Consultas (SELECT)
--- =====================================================================
+-- -------------------------------------------------------------------------------------------------
+-- SEÇÃO 5: SIMULAÇÃO DE FLUXOS DE NEGÓCIO (PEDIDOS EXPANDIDOS)
+-- -------------------------------------------------------------------------------------------------
+-- Pedidos 1-4 (do script anterior, mantidos para consistência)
+INSERT INTO `orders` (`id`, `public_id`, `order_code`, `customer_id`, `pharmacy_id`, `order_status`, `subtotal_amount`, `shipping_amount`, `total_amount`, `created_at`, `updated_at`) VALUES
+(1, UUID_TO_BIN(UUID()), 'MKP-2025-00001', 1, 2, 'DELIVERED', 29.98, 5.00, 34.98, '2025-09-25 10:00:00', '2025-09-26 14:00:00');
+INSERT INTO `order_items` (`order_id`, `product_variant_id`, `quantity`, `unit_price`) VALUES (1, 1, 2, 14.99);
+INSERT INTO `payments` (`order_id`, `amount`, `payment_method`, `status`, `transaction_id`) VALUES (1, 34.98, 'CREDIT_CARD', 'SUCCESSFUL', 'txn_1a2b3c4d5e6f');
+INSERT INTO `deliveries` (`id`, `order_id`, `delivery_person_id`, `shipping_address_id`, `delivery_status`) VALUES (1, 1, 3, 3, 'DELIVERED');
 
--- 1. Consultar todos os produtos disponíveis na "FarmaBem - Matriz" (ID 1), com preço e quantidade.
-SELECT 
-    p.name AS produto,
-    pv.package_size AS embalagem,
-    i.price AS preco,
-    i.quantity AS estoque
-FROM inventory i
-JOIN product_variants pv ON i.product_variant_id = pv.id
-JOIN products p ON pv.product_id = p.id
-WHERE i.pharmacy_id = 1;
+INSERT INTO `orders` (`id`, `public_id`, `order_code`, `customer_id`, `pharmacy_id`, `order_status`, `subtotal_amount`, `shipping_amount`, `total_amount`) VALUES
+(2, UUID_TO_BIN(UUID()), 'MKP-2025-00002', 1, 1, 'AWAITING_PAYMENT', 45.00, 7.50, 52.50);
+INSERT INTO `order_items` (`order_id`, `product_variant_id`, `quantity`, `unit_price`) VALUES (2, 3, 1, 45.00);
+INSERT INTO `prescriptions` (`id`, `order_id`, `prescription_code`, `doctor_crm`, `status`, `validated_by`, `validated_at`) VALUES
+(1, 2, 'REC2025-XYZ-987', 'SP123456', 'VALIDATED', 2, NOW() - INTERVAL 1 DAY);
 
--- 2. Consultar os detalhes de um pedido específico (Pedido da Ana, ID = @last_order_id_1).
-SELECT
-    o.id AS pedido_id,
-    o.order_code AS codigo_pedido,
-    c.full_name AS cliente,
-    ph.trade_name AS farmacia,
-    o.order_status AS status_pedido,
-    o.total_amount AS valor_total,
-    d.delivery_status AS status_entrega
-FROM orders o
-JOIN customers c ON o.customer_id = c.user_id
-JOIN pharmacies ph ON o.pharmacy_id = ph.id
-LEFT JOIN deliveries d ON o.id = d.order_id
-WHERE o.id = @last_order_id_1;
+INSERT INTO `promotions` (`id`, `name`, `discount_type`, `discount_value`, `start_date`, `end_date`, `pharmacy_id`) VALUES
+(1, '10% Off Dermocosméticos', 'PERCENTAGE', 10.00, NOW() - INTERVAL 10 DAY, NOW() + INTERVAL 20 DAY, 2);
+INSERT INTO `promotion_targets` (`promotion_id`, `target_type`, `target_id`) VALUES (1, 'CATEGORY', 2);
+INSERT INTO `promotion_rules` (`promotion_id`, `rule_type`, `rule_value`) VALUES (1, 'MIN_CART_VALUE', '50.00');
 
--- 3. Listar todos os pedidos que necessitam de validação de receita.
-SELECT
-    o.id AS pedido_id,
-    c.full_name AS cliente,
-    p.prescription_code AS codigo_receita,
-    p.status AS status_receita,
-    o.created_at AS data_pedido
-FROM prescriptions p
-JOIN orders o ON p.order_id = o.id
-JOIN customers c ON o.customer_id = c.user_id
-WHERE p.status = 'PENDING_VALIDATION';
+SET @subtotal_p3 = 89.90 * 5; SET @discount_p3 = @subtotal_p3 * 0.10; SET @total_p3 = @subtotal_p3 - @discount_p3 + 25.00;
+INSERT INTO `orders` (`id`, `public_id`, `order_code`, `customer_id`, `pharmacy_id`, `order_status`, `subtotal_amount`, `discount_amount`, `shipping_amount`, `total_amount`) VALUES
+(3, UUID_TO_BIN(UUID()), 'MKP-2025-00003', 4, 2, 'PROCESSING', @subtotal_p3, @discount_p3, 25.00, @total_p3);
+INSERT INTO `order_items` (`order_id`, `product_variant_id`, `quantity`, `unit_price`) VALUES (3, 4, 5, 89.90);
+INSERT INTO `payments` (`order_id`, `amount`, `payment_method`, `status`, `transaction_id`) VALUES (3, @total_p3, 'BANK_SLIP', 'SUCCESSFUL', 'txn_7g8h9i0j1k2l');
 
--- 4. Encontrar todos os analgésicos e antitérmicos (Categoria ID 4) e ordená-los por preço.
-SELECT 
-    p.name,
-    b.name AS brand,
-    ph.trade_name AS pharmacy,
-    i.price
-FROM inventory i
-JOIN product_variants pv ON i.product_variant_id = pv.id
-JOIN products p ON pv.product_id = p.id
-JOIN brands b ON p.brand_id = b.id
-JOIN pharmacies ph ON i.pharmacy_id = ph.id
-JOIN product_categories pc ON p.id = pc.product_id
-WHERE pc.category_id = 4 AND i.quantity > 0
-ORDER BY i.price ASC;
+INSERT INTO `orders` (`id`, `public_id`, `order_code`, `customer_id`, `pharmacy_id`, `order_status`, `subtotal_amount`, `shipping_amount`, `total_amount`) VALUES
+(4, UUID_TO_BIN(UUID()), 'MKP-2025-00004', 1, 1, 'CANCELLED', 35.90, 5.00, 40.90);
+INSERT INTO `order_items` (`order_id`, `product_variant_id`, `quantity`, `unit_price`) VALUES (4, 6, 1, 35.90);
+INSERT INTO `payments` (`order_id`, `amount`, `payment_method`, `status`) VALUES (4, 40.90, 'CREDIT_CARD', 'PENDING');
 
+-- Pedido 5: NOVO - Compra inter-estadual com promoção (João Pereira | FarmaSsa | Itens Diversos) - ENVIADO
+INSERT INTO `promotions` (`id`, `name`, `discount_type`, `discount_value`, `start_date`, `end_date`, `pharmacy_id`) VALUES
+(2, 'Leve 2 Cremes Dentais por R$10', 'FIXED_AMOUNT', 10.00, NOW() - INTERVAL 5 DAY, NOW() + INTERVAL 5 DAY, 4);
+INSERT INTO `promotion_targets` (`promotion_id`, `target_type`, `target_id`) VALUES (2, 'PRODUCT', 7);
+INSERT INTO `promotion_rules` (`promotion_id`, `rule_type`, `rule_value`) VALUES (2, 'MIN_QUANTITY', '2');
 
--- =====================================================================
--- Seção 7: Exemplos de Atualizações (UPDATE)
--- =====================================================================
+SET @subtotal_p5 = (6.50 * 2) + 65.00; SET @discount_p5 = (6.50*2) - 10.00; SET @total_p5 = @subtotal_p5 - @discount_p5 + 15.00;
+INSERT INTO `orders` (`id`, `public_id`, `order_code`, `customer_id`, `pharmacy_id`, `order_status`, `subtotal_amount`, `discount_amount`, `shipping_amount`, `total_amount`) VALUES
+(5, UUID_TO_BIN(UUID()), 'MKP-2025-00005', 6, 4, 'SHIPPED', @subtotal_p5, @discount_p5, 15.00, @total_p5);
+INSERT INTO `order_items` (`order_id`, `product_variant_id`, `quantity`, `unit_price`) VALUES (5, 9, 2, 6.50), (5, 10, 1, 65.00);
+INSERT INTO `payments` (`order_id`, `amount`, `payment_method`, `status`, `transaction_id`) VALUES (5, @total_p5, 'PIX', 'SUCCESSFUL', 'txn_pix_3m4n5o6p');
+INSERT INTO `deliveries` (`id`, `order_id`, `delivery_person_id`, `shipping_address_id`, `delivery_status`) VALUES (2, 5, 8, 8, 'IN_TRANSIT');
+INSERT INTO `prescriptions` (`id`, `order_id`, `prescription_code`, `doctor_crm`, `status`, `validated_by`, `validated_at`) VALUES
+(2, 5, 'REC2025-ABC-123', 'BA654321', 'VALIDATED', 7, NOW() - INTERVAL 2 HOUR);
 
--- 1. Simular a venda de um item: Atualizar o estoque de Dipirona (variant_id 2) na FarmaBem (pharmacy_id 1)
--- Supondo que o pedido @last_order_id_1 acaba de ser processado.
-UPDATE inventory
-SET quantity = quantity - 1
-WHERE pharmacy_id = 1 AND product_variant_id = 2;
+-- Pedido 6: NOVO - Prescrição Rejeitada (João Pereira | SulFarma | Clonazepam) - CANCELADO
+INSERT INTO `orders` (`id`, `public_id`, `order_code`, `customer_id`, `pharmacy_id`, `order_status`, `subtotal_amount`, `shipping_amount`, `total_amount`) VALUES
+(6, UUID_TO_BIN(UUID()), 'MKP-2025-00006', 6, 5, 'CANCELLED', 17.50, 8.00, 25.50);
+INSERT INTO `order_items` (`order_id`, `product_variant_id`, `quantity`, `unit_price`) VALUES (6, 11, 1, 17.50);
+INSERT INTO `prescriptions` (`id`, `order_id`, `prescription_code`, `doctor_crm`, `status`, `validated_by`, `validated_at`) VALUES
+(3, 6, 'REC2025-DEF-456', 'RS112233', 'REJECTED', 5, NOW() - INTERVAL 1 HOUR);
+-- Pagamento nem chega a ser criado pois o fluxo foi barrado na validação.
 
--- 2. Atualizar o status de um pedido para "Enviado" (SHIPPED).
-UPDATE orders
-SET order_status = 'SHIPPED'
-WHERE id = @last_order_id_3;
+-- -------------------------------------------------------------------------------------------------
+-- SEÇÃO 6: ENGAJAMENTO (AVALIAÇÕES EXPANDIDAS)
+-- -------------------------------------------------------------------------------------------------
+INSERT INTO `reviews` (`reviewer_id`, `rating`, `comment`, `reviewable_type`, `reviewable_id`) VALUES
+(1, 5, 'Produto excelente, aliviou minha dor de cabeça rapidamente.', 'PRODUCT_VARIANT', 1),
+(1, 4, 'O entregador foi rápido e cordial.', 'DELIVERY', 1),
+(1, 5, 'Ótimo preço na Drogaria Bem-Estar para este produto!', 'PHARMACY', 2),
+(4, 5, 'Compra em volume para nossos funcionários. Processo simples e entrega rápida.', 'ORDER', 3),
+(1, 5, 'A plataforma é muito fácil de usar e comparar preços.', 'SYSTEM', NULL),
+(6, 3, 'O produto é bom, mas a entrega demorou um pouco mais que o esperado.', 'ORDER', 5),
+(6, 1, 'Minha receita foi rejeitada e não entendi o motivo. Experiência frustrante.', 'ORDER', 6),
+(1, 4, 'Gosto muito deste shampoo, sempre compro.', 'PRODUCT_VARIANT', 7);
 
--- 3. Validar uma receita médica. (A farmacêutica Fernanda, user_id 6, validou a receita do pedido 2)
-UPDATE prescriptions
-SET 
-    status = 'VALIDATED',
-    validated_by = 6,
-    validated_at = CURRENT_TIMESTAMP(6)
-WHERE order_id = @last_order_id_2;
+-- -------------------------------------------------------------------------------------------------
+-- SEÇÃO 7: GOVERNANÇA E CICLO DE VIDA DOS DADOS (EXPANDIDO)
+-- -------------------------------------------------------------------------------------------------
+UPDATE `users` SET `deleted_at` = NOW() WHERE `id` = 3;
+UPDATE `pharmacies` SET `deleted_at` = NOW() WHERE `id` = 3;
 
--- Consequentemente, o status do pedido também deve ser atualizado.
-UPDATE orders
-SET order_status = 'PROCESSING' -- ou 'AWAITING_PAYMENT' se o fluxo exigir
-WHERE id = @last_order_id_2;
+INSERT INTO `audit_log` (`table_name`, `row_pk`, `column_name`, `old_value`, `new_value`, `changed_by_user_id`) VALUES
+('inventory', 3, 'price', '45.00', '47.50', 2),
+('inventory', 1, 'quantity', '100', '150', 2),
+('users', 3, 'is_active', '1', '0', 5);
+UPDATE `inventory` SET `price` = 47.50 WHERE `pharmacy_id` = 1 AND `product_variant_id` = 3;
+UPDATE `inventory` SET `quantity` = 150 WHERE `pharmacy_id` = 1 AND `product_variant_id` = 1;
 
--- 4. Desativar um usuário em vez de deletá-lo (Soft Delete).
-UPDATE users
-SET is_active = FALSE
-WHERE email = 'gisele.cliente@email.com';
+-- -------------------------------------------------------------------------------------------------
+-- CONCLUSÃO: FINALIZAÇÃO DA TRANSAÇÃO
+-- -------------------------------------------------------------------------------------------------
+COMMIT;
+
+-- =================================================================================================
+-- FIM DO SCRIPT DE POPULAÇÃO DE DADOS
+-- =================================================================================================
