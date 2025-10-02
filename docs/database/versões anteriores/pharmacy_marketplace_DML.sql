@@ -1,10 +1,11 @@
 -- =================================================================================================
 -- SCRIPT DE POPULAÇÃO DE DADOS (DATA SEEDING) - PHARMACY MARKETPLACE
 -- =================================================================================================
+
 -- OBJETIVO:
--- Este script realiza uma limpeza completa e repopulação massiva do banco de dados com um
--- conjunto de dados extremamente rico, diversificado e geograficamente expandido.
--- Ele foi projetado para ser um ambiente de teste e desenvolvimento robusto e final.
+-- Este script realiza uma limpeza completa e repopulação massiva do banco de dados e, em seguida,
+-- simula a evolução e o ciclo de vida dos dados ao longo do tempo através de uma série de
+-- operações de UPDATE, DELETE e Soft DELETE.
 
 -- -------------------------------------------------------------------------------------------------
 -- SEÇÃO 0: PREPARAÇÃO DO AMBIENTE E LIMPEZA DE DADOS
@@ -44,12 +45,12 @@ TRUNCATE TABLE `users`;
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- -------------------------------------------------------------------------------------------------
--- INÍCIO DA TRANSAÇÃO
+-- INÍCIO DA TRANSAÇÃO DE POPULAÇÃO INICIAL
 -- -------------------------------------------------------------------------------------------------
 START TRANSACTION;
 
 -- -------------------------------------------------------------------------------------------------
--- SEÇÃO 1: DADOS FUNDAMENTAIS (LOOKUP TABLES)
+-- SEÇÃO 1: DADOS FUNDAMENTAIS
 -- -------------------------------------------------------------------------------------------------
 INSERT INTO `roles` (`id`, `name`) VALUES
 (1, 'ROLE_CUSTOMER'), (2, 'ROLE_PHARMACY_ADMIN'), (3, 'ROLE_PHARMACIST'),
@@ -74,7 +75,7 @@ INSERT INTO `categories` (`id`, `name`, `parent_id`) VALUES
 (13, 'Primeiros Socorros', NULL), (14, 'Higiene Bucal', 3), (15, 'Psicotrópicos', 1);
 
 -- -------------------------------------------------------------------------------------------------
--- SEÇÃO 2: ENTIDADES CENTRAIS (EXPANSÃO GEOGRÁFICA)
+-- SEÇÃO 2: ENTIDADES CENTRAIS
 -- -------------------------------------------------------------------------------------------------
 INSERT INTO `addresses` (`id`, `street`, `complement`, `neighborhood`, `city`, `state`, `postal_code`) VALUES
 (1, 'Avenida Paulista, 1500', 'Andar 10', 'Bela Vista', 'São Paulo', 'SP', '01310-200'),
@@ -126,7 +127,7 @@ INSERT INTO `customer_addresses` (`customer_id`, `address_id`, `address_type`, `
 (1, 3, 'SHIPPING', TRUE), (1, 5, 'OTHER', FALSE), (4, 4, 'BILLING', TRUE), (6, 8, 'SHIPPING', TRUE);
 
 -- -------------------------------------------------------------------------------------------------
--- SEÇÃO 3: CATÁLOGO DE PRODUTOS E INVENTÁRIO (EXPANDIDO)
+-- SEÇÃO 3: CATÁLOGO DE PRODUTOS E INVENTÁRIO
 -- -------------------------------------------------------------------------------------------------
 INSERT INTO `products` (`id`, `public_id`, `name`, `active_principle`, `is_prescription_required`, `brand_id`, `manufacturer_id`) VALUES
 (1, UUID_TO_BIN(UUID()), 'Dipirona Sódica', 'Dipirona Sódica', FALSE, 2, 2),
@@ -169,13 +170,13 @@ INSERT INTO `inventory` (`pharmacy_id`, `product_variant_id`, `price`, `quantity
 (5, 1, 15.25, 90), (5, 8, 23.00, 80), (5, 10, 68.50, 40), (5, 11, 17.50, 35);
 
 -- -------------------------------------------------------------------------------------------------
--- SEÇÃO 4: CARRINHOS DE COMPRAS ATIVOS (EXPANDIDO)
+-- SEÇÃO 4: CARRINHOS DE COMPRAS ATIVOS
 -- -------------------------------------------------------------------------------------------------
 INSERT INTO `customer_cart_items` (`customer_id`, `product_variant_id`, `quantity`) VALUES
 (1, 7, 1), (1, 6, 2), (6, 9, 3), (6, 10, 1);
 
 -- -------------------------------------------------------------------------------------------------
--- SEÇÃO 5: SIMULAÇÃO DE FLUXOS DE NEGÓCIO (PEDIDOS EXPANDIDOS)
+-- SEÇÃO 5: SIMULAÇÃO DE FLUXOS DE NEGÓCIO
 -- -------------------------------------------------------------------------------------------------
 INSERT INTO `orders` (`id`, `public_id`, `order_code`, `customer_id`, `pharmacy_id`, `order_status`, `subtotal_amount`, `shipping_amount`, `total_amount`, `created_at`, `updated_at`) VALUES
 (1, UUID_TO_BIN(UUID()), 'MKP-2025-00001', 1, 2, 'DELIVERED', 29.98, 5.00, 34.98, '2025-09-25 10:00:00', '2025-09-26 14:00:00');
@@ -207,7 +208,7 @@ INSERT INTO `payments` (`order_id`, `amount`, `payment_method`, `status`) VALUES
 
 INSERT INTO `promotions` (`id`, `name`, `discount_type`, `discount_value`, `start_date`, `end_date`, `pharmacy_id`) VALUES
 (2, 'Leve 2 Cremes Dentais por R$10', 'FIXED_AMOUNT', 10.00, NOW() - INTERVAL 5 DAY, NOW() + INTERVAL 5 DAY, 4);
-INSERT INTO `promotion_targets` (`promotion_id`, `target_type`, `target_id`) VALUES (2, 'PRODUCT', 7);
+INSERT INTO `promotion_targets` (`promotion_id`, `target_type`, `target_id`) VALUES (2, 'PRODUCT', 9);
 INSERT INTO `promotion_rules` (`promotion_id`, `rule_type`, `rule_value`) VALUES (2, 'MIN_QUANTITY', '2');
 
 SET @subtotal_p5 = (6.50 * 2) + 65.00; SET @discount_p5 = (6.50*2) - 10.00; SET @total_p5 = @subtotal_p5 - @discount_p5 + 15.00;
@@ -224,10 +225,9 @@ INSERT INTO `orders` (`id`, `public_id`, `order_code`, `customer_id`, `pharmacy_
 INSERT INTO `order_items` (`order_id`, `product_variant_id`, `quantity`, `unit_price`) VALUES (6, 11, 1, 17.50);
 INSERT INTO `prescriptions` (`id`, `order_id`, `prescription_code`, `doctor_crm`, `status`, `validated_by`, `validated_at`) VALUES
 (3, 6, 'REC2025-DEF-456', 'RS112233', 'REJECTED', 5, NOW() - INTERVAL 1 HOUR);
--- Pagamento nem chega a ser criado pois o fluxo foi barrado na validação.
 
 -- -------------------------------------------------------------------------------------------------
--- SEÇÃO 6: ENGAJAMENTO (AVALIAÇÕES EXPANDIDAS)
+-- SEÇÃO 6: ENGAJAMENTO
 -- -------------------------------------------------------------------------------------------------
 INSERT INTO `reviews` (`reviewer_id`, `rating`, `comment`, `reviewable_type`, `reviewable_id`) VALUES
 (1, 5, 'Produto excelente, aliviou minha dor de cabeça rapidamente.', 'PRODUCT_VARIANT', 1),
@@ -240,7 +240,7 @@ INSERT INTO `reviews` (`reviewer_id`, `rating`, `comment`, `reviewable_type`, `r
 (1, 4, 'Gosto muito deste shampoo, sempre compro.', 'PRODUCT_VARIANT', 7);
 
 -- -------------------------------------------------------------------------------------------------
--- SEÇÃO 7: GOVERNANÇA E CICLO DE VIDA DOS DADOS (EXPANDIDO)
+-- SEÇÃO 7: GOVERNANÇA E CICLO DE VIDA DOS DADOS
 -- -------------------------------------------------------------------------------------------------
 UPDATE `users` SET `deleted_at` = NOW() WHERE `id` = 3;
 UPDATE `pharmacies` SET `deleted_at` = NOW() WHERE `id` = 3;
@@ -253,10 +253,64 @@ UPDATE `inventory` SET `price` = 47.50 WHERE `pharmacy_id` = 1 AND `product_vari
 UPDATE `inventory` SET `quantity` = 150 WHERE `pharmacy_id` = 1 AND `product_variant_id` = 1;
 
 -- -------------------------------------------------------------------------------------------------
--- CONCLUSÃO: FINALIZAÇÃO DA TRANSAÇÃO
+-- FIM DA TRANSAÇÃO DE POPULAÇÃO INICIAL
 -- -------------------------------------------------------------------------------------------------
 COMMIT;
 
 -- =================================================================================================
--- FIM DO SCRIPT DE POPULAÇÃO DE DADOS
+-- SEÇÃO 8: SIMULAÇÃO DE EVOLUÇÃO DE DADOS (UPDATES & DELETES)
+-- =================================================================================================
+-- Esta seção simula as operações que ocorreriam no banco de dados após a carga inicial,
+-- representando o uso diário da plataforma.
+-- =================================================================================================
+
+-- Inicia uma nova transação para as operações de evolução.
+START TRANSACTION;
+
+-- Cenário 1: Progressão de um Pedido
+-- O Pedido 3 da Construtora RJ, que estava 'PROCESSING', agora foi enviado.
+UPDATE `orders` SET `order_status` = 'SHIPPED' WHERE `id` = 3;
+INSERT INTO `deliveries` (`order_id`, `delivery_person_id`, `shipping_address_id`, `delivery_status`, `estimated_delivery_date`)
+VALUES (3, 8, 4, 'AWAITING_PICKUP', CURDATE() + INTERVAL 3 DAY);
+-- Algum tempo depois, a entrega é concluída.
+UPDATE `deliveries` SET `delivery_status` = 'DELIVERED' WHERE `order_id` = 3;
+UPDATE `orders` SET `order_status` = 'DELIVERED' WHERE `id` = 3;
+
+-- Cenário 2: Gestão de Inventário
+-- A Drogaria Bem-Estar recebeu um novo lote do Protetor Solar sem cor (ID 5) que estava esgotado.
+UPDATE `inventory` SET `quantity` = 100 WHERE `pharmacy_id` = 2 AND `product_variant_id` = 5;
+-- Devido à alta demanda, a mesma farmácia decide aumentar o preço do Creme Dental Colgate.
+UPDATE `inventory` SET `price` = 6.49 WHERE `pharmacy_id` = 2 AND `product_variant_id` = 9;
+-- A alteração de preço é registrada na auditoria (simulando um trigger).
+INSERT INTO `audit_log` (`table_name`, `row_pk`, `column_name`, `old_value`, `new_value`, `changed_by_user_id`)
+VALUES ('inventory', 9, 'price', '5.99', '6.49', 5);
+
+-- Cenário 3: Interação do Cliente
+-- O cliente João Pereira (ID 6) remove o Ômega 3 (ID 10) de seu carrinho.
+-- Este é um caso para HARD DELETE, pois a informação do carrinho é volátil.
+DELETE FROM `customer_cart_items` WHERE `customer_id` = 6 AND `product_variant_id` = 10;
+-- O mesmo cliente decide mudar seu endereço de entrega padrão para um novo endereço em Curitiba.
+UPDATE `customer_addresses` SET `is_default` = FALSE WHERE `customer_id` = 6 AND `is_default` = TRUE;
+UPDATE `customer_addresses` SET `is_default` = TRUE WHERE `customer_id` = 6 AND `address_id` = 8;
+
+-- Cenário 4: Gestão de Marketing
+-- A FarmaSsa (ID 4) decide estender a promoção do creme dental por mais 10 dias.
+UPDATE `promotions` SET `end_date` = `end_date` + INTERVAL 10 DAY WHERE `id` = 2;
+
+-- Cenário 5: Soft Deletes Estratégicos
+-- A variante de Dipirona em Gotas (ID 2) foi descontinuada pelo fabricante.
+-- Usamos um SOFT DELETE para removê-la das buscas, mas manter o histórico de pedidos que a continham.
+UPDATE `product_variants` SET `deleted_at` = NOW() WHERE `id` = 2;
+-- O funcionário Lucas Moura (ID 7) da FarmaSsa pediu demissão.
+-- Seu usuário é desativado via SOFT DELETE para manter o histórico de validações que ele possa ter feito.
+UPDATE `users` SET `deleted_at` = NOW(), `is_active` = FALSE WHERE `id` = 7;
+-- A auditoria registra a desativação.
+INSERT INTO `audit_log` (`table_name`, `row_pk`, `column_name`, `old_value`, `new_value`, `changed_by_user_id`)
+VALUES ('users', 7, 'is_active', '1', '0', 2); -- Supondo que Bruno (Admin) fez a alteração.
+
+-- Finaliza a transação das operações de evolução.
+COMMIT;
+
+-- =================================================================================================
+-- FIM DO SCRIPT DE POPULAÇÃO EVOLUTIVO
 -- =================================================================================================
