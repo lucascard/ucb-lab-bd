@@ -1,5 +1,5 @@
 -- =====================================================================
--- Script DDL Completo para o Marketplace de Farmácia (Versão Refinada)
+-- Script DDL Completo para o Marketplace de Farmácia (Versão 2.0 Otimizada)
 -- =====================================================================
 -- Este script implementa o modelo relacional arquitetado, focando em
 -- desempenho, segurança e escalabilidade. Ele usa uma estratégia de chave híbrida,
@@ -25,13 +25,22 @@ CREATE TABLE IF NOT EXISTS users (
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     created_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
     updated_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
-    INDEX idx_public_id (public_id)
+    deleted_at TIMESTAMP(6) NULL DEFAULT NULL, -- Para Soft Deletes
+    
+    -- Otimização: Constraints nomeadas e índices explícitos
+    CONSTRAINT uq_users_public_id UNIQUE (public_id),
+    CONSTRAINT uq_users_email UNIQUE (email),
+    CONSTRAINT uq_users_phone_number UNIQUE (phone_number),
+    INDEX idx_users_public_id (public_id),
+    INDEX idx_users_deleted_at (deleted_at)
 );
 
 -- Define as funções (perfis) disponíveis no sistema (RBAC).
 CREATE TABLE IF NOT EXISTS roles (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL UNIQUE -- Ex: 'ROLE_CUSTOMER', 'ROLE_PHARMACY_ADMIN'
+    name VARCHAR(50) NOT NULL UNIQUE,  -- Ex: 'ROLE_CUSTOMER', 'ROLE_PHARMACY_ADMIN'
+    
+    CONSTRAINT uq_roles_name UNIQUE (name)
 );
 
 -- Tabela de junção para atribuir funções aos usuários (Muitos-para-Muitos).
@@ -40,8 +49,13 @@ CREATE TABLE IF NOT EXISTS user_roles (
     role_id INT NOT NULL,
     
     PRIMARY KEY (user_id, role_id),
-    CONSTRAINT fk_user_roles_users FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE NO ACTION,
-    CONSTRAINT fk_user_roles_roles FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE ON UPDATE NO ACTION
+    
+    -- Otimização: ON DELETE RESTRICT para Soft Deletes 
+    CONSTRAINT fk_user_roles_user_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT fk_user_roles_role_id FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    
+    -- Otimização: Índice em FK 
+    INDEX idx_user_roles_role_id (role_id)
 );
 
 -- =====================================================================
@@ -58,6 +72,8 @@ CREATE TABLE IF NOT EXISTS customers (
     birth_date DATE,
     
     CONSTRAINT fk_customers_users FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE NO ACTION,
+    CONSTRAINT uq_customers_cpf UNIQUE (cpf),
+    CONSTRAINT uq_customers_cnpj UNIQUE (cnpj),
     CONSTRAINT chk_customer_type CHECK (
         (customer_type = 'INDIVIDUAL' AND cpf IS NOT NULL AND cnpj IS NULL) OR
         (customer_type = 'LEGAL_ENTITY' AND cnpj IS NOT NULL AND cpf IS NULL)
@@ -72,7 +88,13 @@ CREATE TABLE IF NOT EXISTS pharmacies (
     cnpj VARCHAR(14) NOT NULL UNIQUE,
     phone VARCHAR(20) NOT NULL,
     email VARCHAR(255),
-    created_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6)
+    created_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    
+    deleted_at TIMESTAMP(6) NULL DEFAULT NULL, -- Para Soft Deletes
+
+    CONSTRAINT uq_pharmacies_legal_name UNIQUE (legal_name),
+    CONSTRAINT uq_pharmacies_cnpj UNIQUE (cnpj),
+    INDEX idx_pharmacies_deleted_at (deleted_at)
 );
 
 -- Tabela de perfil para funcionários de farmácias.
@@ -81,8 +103,11 @@ CREATE TABLE IF NOT EXISTS pharmacy_staff (
     pharmacy_id BIGINT NOT NULL,
     position VARCHAR(100) NOT NULL,
     
-    CONSTRAINT fk_pharmacy_staff_users FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE NO ACTION,
-    CONSTRAINT fk_pharmacy_staff_pharmacies FOREIGN KEY (pharmacy_id) REFERENCES pharmacies(id) ON DELETE RESTRICT ON UPDATE NO ACTION
+    CONSTRAINT fk_pharmacy_staff_users FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_pharmacy_staff_pharmacies FOREIGN KEY (pharmacy_id) REFERENCES pharmacies(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    
+     -- Otimização: Índice em FK
+    INDEX idx_pharmacy_staff_pharmacy_id (pharmacy_id)
 );
 
 -- Tabela de perfil para entregadores.
@@ -91,7 +116,8 @@ CREATE TABLE IF NOT EXISTS delivery_personnel (
     cnh VARCHAR(11) NOT NULL UNIQUE,
     vehicle_details TEXT,
     
-    CONSTRAINT fk_delivery_personnel_users FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE NO ACTION
+    CONSTRAINT fk_delivery_personnel_users FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT uq_delivery_personnel_cnh UNIQUE (cnh)
 );
 
 -- =====================================================================
@@ -101,13 +127,17 @@ CREATE TABLE IF NOT EXISTS delivery_personnel (
 -- Tabela para as marcas dos produtos
 CREATE TABLE IF NOT EXISTS brands (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL UNIQUE
+    name VARCHAR(100) NOT NULL UNIQUE,
+    
+    CONSTRAINT uq_brands_name UNIQUE (name)
 );
 
 -- Tabela para os fabricantes dos produtos
 CREATE TABLE IF NOT EXISTS manufacturers (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL UNIQUE
+    name VARCHAR(255) NOT NULL UNIQUE,
+    
+    CONSTRAINT uq_manufacturers_name UNIQUE (name)
 );
 
 -- Tabela para os produtos
@@ -120,14 +150,22 @@ CREATE TABLE IF NOT EXISTS products (
     active_principle VARCHAR(255) NOT NULL,
     pharmaceutical_form VARCHAR(100),
     is_prescription_required BOOLEAN NOT NULL DEFAULT FALSE,
-    controlled_substance_list VARCHAR(10),
+    controlled_substance_list VARCHAR(10), -- Ex: "A1", "B2", "C1" ref. Portaria 344/98
     brand_id BIGINT,
     manufacturer_id BIGINT,
     created_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    deleted_at TIMESTAMP(6) NULL DEFAULT NULL, -- Para Soft Deletes
     
-    INDEX idx_public_id (public_id),
-    CONSTRAINT fk_products_brands FOREIGN KEY (brand_id) REFERENCES brands(id) ON DELETE RESTRICT ON UPDATE NO ACTION,
-    CONSTRAINT fk_products_manufacturers FOREIGN KEY (manufacturer_id) REFERENCES manufacturers(id) ON DELETE RESTRICT ON UPDATE NO ACTION
+    CONSTRAINT uq_products_public_id UNIQUE (public_id),
+    CONSTRAINT uq_products_anvisa_code UNIQUE (anvisa_code),
+    CONSTRAINT fk_products_brand_id FOREIGN KEY (brand_id) REFERENCES brands(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT fk_products_manufacturer_id FOREIGN KEY (manufacturer_id) REFERENCES manufacturers(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    INDEX idx_products_public_id (public_id),
+    INDEX idx_products_deleted_at (deleted_at),
+    
+    -- Otimização: Índice em FK 
+    INDEX idx_products_brand_id (brand_id),
+    INDEX idx_products_manufacturer_id (manufacturer_id)
 );
 
 -- Tabela para cadastro dos produtos das farmacias e seus variantes
@@ -138,8 +176,16 @@ CREATE TABLE IF NOT EXISTS product_variants (
     dosage VARCHAR(50),
     package_size VARCHAR(50),
     gtin VARCHAR(14) UNIQUE,
+    deleted_at TIMESTAMP(6) NULL DEFAULT NULL, -- Para Soft Deletes
     
-    CONSTRAINT fk_product_variants_products FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE ON UPDATE NO ACTION
+    CONSTRAINT uq_product_variants_sku UNIQUE (sku),
+    CONSTRAINT uq_product_variants_gtin UNIQUE (gtin),
+    CONSTRAINT fk_product_variants_product_id FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    INDEX idx_product_variants_deleted_at (deleted_at),
+    
+    
+    -- Otimização: Índice em FK
+    INDEX idx_product_variants_product_id (product_id)
 );
 
 -- Tabela para categoria dos produtos
@@ -148,7 +194,7 @@ CREATE TABLE IF NOT EXISTS categories (
     name VARCHAR(100) NOT NULL,
     parent_id BIGINT,
     
-    CONSTRAINT fk_categories_parent FOREIGN KEY (parent_id) REFERENCES categories(id) ON DELETE SET NULL ON UPDATE NO ACTION
+    CONSTRAINT fk_categories_parent FOREIGN KEY (parent_id) REFERENCES categories(id) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- Tabela que vincula os produtos com sua categoria
@@ -157,8 +203,11 @@ CREATE TABLE IF NOT EXISTS product_categories (
     category_id BIGINT NOT NULL,
     
     PRIMARY KEY (product_id, category_id),
-    CONSTRAINT fk_product_categories_products FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE ON UPDATE NO ACTION,
-    CONSTRAINT fk_product_categories_categories FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE ON UPDATE NO ACTION
+    CONSTRAINT fk_product_categories_product_id FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_product_categories_category_id FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    
+    -- Otimização: Índice em FK 
+    INDEX idx_product_categories_category_id (category_id)
 );
 
 -- =====================================================================
@@ -175,9 +224,9 @@ CREATE TABLE IF NOT EXISTS inventory (
     updated_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
     
     PRIMARY KEY (pharmacy_id, product_variant_id),
-    INDEX idx_product_variant_price (product_variant_id, price),
-    CONSTRAINT fk_inventory_pharmacies FOREIGN KEY (pharmacy_id) REFERENCES pharmacies(id) ON DELETE CASCADE ON UPDATE NO ACTION,
-    CONSTRAINT fk_inventory_product_variants FOREIGN KEY (product_variant_id) REFERENCES product_variants(id) ON DELETE CASCADE ON UPDATE NO ACTION
+    CONSTRAINT fk_inventory_pharmacy_id FOREIGN KEY (pharmacy_id) REFERENCES pharmacies(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_inventory_product_variant_id FOREIGN KEY (product_variant_id) REFERENCES product_variants(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    INDEX idx_inventory_product_variant_price (product_variant_id, price)
 );
 
 -- Tabela de Promoções
@@ -232,9 +281,15 @@ CREATE TABLE IF NOT EXISTS orders (
     created_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
     updated_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
     
-    INDEX idx_public_id (public_id),
-    CONSTRAINT fk_orders_customers FOREIGN KEY (customer_id) REFERENCES customers(user_id) ON DELETE RESTRICT ON UPDATE NO ACTION,
-    CONSTRAINT fk_orders_pharmacies FOREIGN KEY (pharmacy_id) REFERENCES pharmacies(id) ON DELETE RESTRICT ON UPDATE NO ACTION
+    CONSTRAINT uq_orders_public_id UNIQUE (public_id),
+    CONSTRAINT uq_orders_order_code UNIQUE (order_code),
+    CONSTRAINT fk_orders_customer_id FOREIGN KEY (customer_id) REFERENCES customers(user_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT fk_orders_pharmacy_id FOREIGN KEY (pharmacy_id) REFERENCES pharmacies(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    INDEX idx_orders_public_id (public_id),
+    
+    -- Otimização: Índice em FK 
+    INDEX idx_orders_customer_id (customer_id),
+    INDEX idx_orders_pharmacy_id (pharmacy_id)
 );
 
 -- Tabela dos Itens dos Pedidos
@@ -407,4 +462,21 @@ CREATE TABLE IF NOT EXISTS reviews (
 
     -- Índice para buscar todas as avaliações de um item específico de forma muito rápida.
     INDEX idx_reviewable (reviewable_type, reviewable_id)
+);
+
+-- =====================================================================
+-- Seção 9: Governança e Auditoria
+-- =====================================================================
+
+-- Tabela genérica para registrar todas as alterações em dados críticos.
+CREATE TABLE IF NOT EXISTS audit_log (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    table_name VARCHAR(64) NOT NULL, -- 'Nome da tabela auditada',
+    row_pk BIGINT NOT NULL, -- 'Chave primária do registro alterado',
+    column_name VARCHAR(64) NOT NULL, -- 'Nome da coluna alterada',
+    old_value TEXT, -- 'Valor antes da alteração',
+    new_value TEXT, -- 'Valor após a alteração',
+    changed_by_user_id BIGINT, -- 'ID do usuário que realizou a alteração (via session var)',
+    changed_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    INDEX idx_audit_log_lookup (table_name, row_pk, changed_at)
 );
